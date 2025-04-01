@@ -2,14 +2,19 @@ import 'package:baliqchi/generated/l10n.dart';
 import 'package:baliqchi/src/config/components/app_container.dart';
 import 'package:baliqchi/src/config/components/app_elevated_button.dart';
 import 'package:baliqchi/src/config/components/text_field_components.dart';
+import 'package:baliqchi/src/config/theme/app_colors.dart';
 import 'package:baliqchi/src/config/theme/text_styles.dart';
+import 'package:baliqchi/src/core/app_state/cubit/app_cubit.dart';
 import 'package:baliqchi/src/features/economic/data/bodies/create_economic_body.dart';
 import 'package:baliqchi/src/features/economic/presentation/manager/economic_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:money_input_formatter/money_input_formatter.dart';
 import 'package:reactive_forms/reactive_forms.dart';
+import 'package:toastification/toastification.dart';
 
 class CreateEconomicPage extends StatefulWidget {
   const CreateEconomicPage({super.key});
@@ -29,14 +34,14 @@ class _CreateEconomicPageState extends State<CreateEconomicPage> {
     'probabilitySurvival': FormControl<int>(validators: [Validators.required]),
     'finalWeight': FormControl<int>(validators: [Validators.required]),
     'foodPrice': FormControl<String>(validators: [Validators.required]),
-    'amountFeedPerKg': FormControl<int>(validators: [Validators.required]),
+    'amountFeedPerKg': FormControl<double>(validators: [Validators.required]),
     'foodTypeId': FormControl<String>(validators: [Validators.required]),
     'fishTypeId': FormControl<String>(validators: [Validators.required]),
     'technologyId': FormControl<String>(validators: [Validators.required]),
-    'hectare': FormControl<int>(validators: [Validators.required]),
-    'length': FormControl<int>(validators: [Validators.required]),
-    'breadth': FormControl<int>(validators: [Validators.required]),
-    'depth': FormControl<int>(validators: [Validators.required]),
+    'hectare': FormControl<double>(validators: [Validators.required]),
+    'length': FormControl<double>(validators: [Validators.required]),
+    'breadth': FormControl<double>(validators: [Validators.required]),
+    'depth': FormControl<double>(validators: [Validators.required]),
     'salary': FormControl<String>(validators: [Validators.required]),
     'period': FormControl<int>(validators: [Validators.required]),
     'plannedPriceFish': FormControl<String>(validators: [Validators.required]),
@@ -51,14 +56,14 @@ class _CreateEconomicPageState extends State<CreateEconomicPage> {
   FormControl<int> get probabilitySurvival => form.control('probabilitySurvival') as FormControl<int>;
   FormControl<int> get finalWeight => form.control('finalWeight') as FormControl<int>;
   FormControl<String> get foodPrice => form.control('foodPrice') as FormControl<String>;
-  FormControl<int> get amountFeedPerKg =>form.control('amountFeedPerKg') as FormControl<int>;
+  FormControl<double> get amountFeedPerKg =>form.control('amountFeedPerKg') as FormControl<double>;
   FormControl<String> get foodTypeId => form.control('foodTypeId') as FormControl<String>;
   FormControl<String> get fishTypeId => form.control('fishTypeId') as FormControl<String>;
   FormControl<String> get technologyId => form.control('technologyId') as FormControl<String>;
-  FormControl<int> get hectare => form.control('hectare') as FormControl<int>;
-  FormControl<int> get length => form.control('length') as FormControl<int>;
-  FormControl<int> get breadth => form.control('breadth') as FormControl<int>;
-  FormControl<int> get depth => form.control('depth') as FormControl<int>;
+  FormControl<double> get hectare => form.control('hectare') as FormControl<double>;
+  FormControl<double> get length => form.control('length') as FormControl<double>;
+  FormControl<double> get breadth => form.control('breadth') as FormControl<double>;
+  FormControl<double> get depth => form.control('depth') as FormControl<double>;
   FormControl<String> get salary => form.control('salary') as FormControl<String>;
   FormControl<int> get period => form.control('period') as FormControl<int>;
   FormControl<String> get plannedPriceFish => form.control('plannedPriceFish') as FormControl<String>;
@@ -84,7 +89,7 @@ class _CreateEconomicPageState extends State<CreateEconomicPage> {
           padding: const EdgeInsets.all(16.0),
           child: ReactiveFormConsumer(builder: (context, form, child) {
             return AppElevatedButton(
-              text: 'Hisoblash',
+              text: S.of(context).hisoblash,
               onClick: () {
                 if (form.valid) {
                   bloc.createEconomic(
@@ -121,9 +126,38 @@ class _CreateEconomicPageState extends State<CreateEconomicPage> {
         appBar: AppBar(
           title: Text(S.of(context).tahminiyIqtisodiyKorsatkichlar),
         ),
-        body: BlocBuilder<EconomicBloc, EconomicState>(
+        body: BlocConsumer<EconomicBloc, EconomicState>(
+          listener: (context,state){
+            if(state.isCreated){
+              toastification.show(
+                  title: Text(state.createExpenseMonth?.message??'--'),
+                  type: ToastificationType.info,
+                  alignment: Alignment.bottomCenter,
+                  showProgressBar: false,
+                  icon: const Icon(Icons.check_circle_outline),
+                  style: ToastificationStyle.fillColored,
+                  autoCloseDuration: 3.seconds,
+                  primaryColor: AppColors.mainGreenColor
+              );
+              bloc.economics();
+              context.pop();
+            }
+            if(state.hasError){
+              toastification.show(
+                  title: Text(state.errorMessage,style:  const TextStyle(fontSize: 16),),
+                  type: ToastificationType.error,
+                  alignment: Alignment.bottomCenter,
+                  showProgressBar: false,
+                  style: ToastificationStyle.fillColored,
+                  autoCloseDuration: 8.seconds,
+                  primaryColor: AppColors.mainRedColor
+              );
+            }
+          },
           builder: (context, state) {
-            return SingleChildScrollView(
+            return BlocBuilder<AppCubit, AppState>(
+  builder: (context, appState) {
+    return SingleChildScrollView(
               padding: const EdgeInsets.all(16),
               child: Column(
                 children: [
@@ -137,7 +171,7 @@ class _CreateEconomicPageState extends State<CreateEconomicPage> {
                         isDense: true,
                         filled: true,
                         fillColor: Colors.white,
-                        errorStyle: const TextStyle(height: 0),
+                        errorStyle: const TextStyle(height: 0.001),
                         labelText: S.of(context).baliqTuri,
                         labelStyle: CustomTextStyle.hint,
                         border: appTextFiledTransparentBorder(),
@@ -151,7 +185,7 @@ class _CreateEconomicPageState extends State<CreateEconomicPage> {
                             return DropdownMenuItem(
                               value: e.id,
                               child: Text(
-                                e.nameUz ?? "--",
+                                appState.lang=='uz'? e.nameUz ?? "--":e.nameRu ?? "--",
                                 style: CustomTextStyle.h16M,
                               ),
                             );
@@ -174,7 +208,7 @@ class _CreateEconomicPageState extends State<CreateEconomicPage> {
                         isDense: true,
                         filled: true,
                         fillColor: Colors.white,
-                        errorStyle: const TextStyle(height: 0),
+                        errorStyle: const TextStyle(height: 0.001),
                         labelText: S.of(context).boqishUsuli,
                         labelStyle: CustomTextStyle.hint,
                         border: appTextFiledTransparentBorder(),
@@ -188,7 +222,7 @@ class _CreateEconomicPageState extends State<CreateEconomicPage> {
                             return DropdownMenuItem(
                               value: e.id,
                               child: Text(
-                                e.nameUz ?? "--",
+                                appState.lang=='uz'? e.nameUz ?? "--":e.nameRu ?? "--",
                                 style: CustomTextStyle.h16M,
                               ),
                             );
@@ -227,7 +261,7 @@ class _CreateEconomicPageState extends State<CreateEconomicPage> {
                         formControl: hectare,
                         decoration: InputDecoration(
                           isDense: true,
-                          errorStyle: const TextStyle(height: 0),
+                          errorStyle: const TextStyle(height: 0.001),
                           errorText: null,
                           labelText: S.of(context).havzaGektari,
                           labelStyle: CustomTextStyle.hint,
@@ -256,7 +290,7 @@ class _CreateEconomicPageState extends State<CreateEconomicPage> {
                         formControl: length,
                         decoration: InputDecoration(
                           isDense: true,
-                          errorStyle: const TextStyle(height: 0),
+                          errorStyle: const TextStyle(height: 0.001),
                           errorText: null,
                           hintText: S.of(context).havzaUzunligi,
                           hintStyle: CustomTextStyle.hint,
@@ -285,7 +319,7 @@ class _CreateEconomicPageState extends State<CreateEconomicPage> {
                         formControl: breadth,
                         decoration: InputDecoration(
                           isDense: true,
-                          errorStyle: const TextStyle(height: 0),
+                          errorStyle: const TextStyle(height: 0.001),
                           errorText: null,
                           hintText: S.of(context).havzaKengligi,
                           hintStyle: CustomTextStyle.hint,
@@ -312,7 +346,7 @@ class _CreateEconomicPageState extends State<CreateEconomicPage> {
                       formControl: depth,
                       decoration: InputDecoration(
                         isDense: true,
-                        errorStyle: const TextStyle(height: 0),
+                        errorStyle: const TextStyle(height: 0.001),
                         errorText: null,
                         labelText: S.of(context).havzaChuqurligi,
                         labelStyle: CustomTextStyle.hint,
@@ -338,7 +372,7 @@ class _CreateEconomicPageState extends State<CreateEconomicPage> {
                       formControl: fishAmount,
                       decoration: InputDecoration(
                         isDense: true,
-                        errorStyle: const TextStyle(height: 0),
+                        errorStyle: const TextStyle(height: 0.001),
                         errorText: null,
                         labelText: S.of(context).baliqSoni,
                         labelStyle: CustomTextStyle.hint,
@@ -364,7 +398,7 @@ class _CreateEconomicPageState extends State<CreateEconomicPage> {
                       formControl: fishWeight,
                       decoration: InputDecoration(
                         isDense: true,
-                        errorStyle: const TextStyle(height: 0),
+                        errorStyle: const TextStyle(height: 0.001),
                         errorText: null,
                         labelText: S.of(context).mavsumBoshidagiBaliqOgirligiG,
                         labelStyle: CustomTextStyle.hint,
@@ -390,7 +424,7 @@ class _CreateEconomicPageState extends State<CreateEconomicPage> {
                       formControl: probabilitySurvival,
                       decoration: InputDecoration(
                         isDense: true,
-                        errorStyle: const TextStyle(height: 0),
+                        errorStyle: const TextStyle(height: 0.001),
                         errorText: null,
                         labelText: S.of(context).baliqningYashabQolishDarajasi,
                         labelStyle: CustomTextStyle.hint,
@@ -416,7 +450,7 @@ class _CreateEconomicPageState extends State<CreateEconomicPage> {
                       formControl: finalWeight,
                       decoration: InputDecoration(
                         isDense: true,
-                        errorStyle: const TextStyle(height: 0),
+                        errorStyle: const TextStyle(height: 0.001),
                         errorText: null,
                         labelText: S.of(context).mavsumOxiridagiMoljallanganBaliqOgirligiG,
                         labelStyle: CustomTextStyle.hint,
@@ -444,7 +478,7 @@ class _CreateEconomicPageState extends State<CreateEconomicPage> {
                         isDense: true,
                         filled: true,
                         fillColor: Colors.white,
-                        errorStyle: const TextStyle(height: 0),
+                        errorStyle: const TextStyle(height: 0.001),
                         labelText: S.of(context).ovqatTuri,
                         labelStyle: CustomTextStyle.hint,
                         border: appTextFiledTransparentBorder(),
@@ -458,7 +492,7 @@ class _CreateEconomicPageState extends State<CreateEconomicPage> {
                         return DropdownMenuItem(
                           value: e.id,
                           child: Text(
-                            e.nameUz ?? "--",
+                            appState.lang=='uz'? e.nameUz ?? "--":e.nameRu ?? "--",
                             style: CustomTextStyle.h16M,
                           ),
                         );
@@ -479,7 +513,7 @@ class _CreateEconomicPageState extends State<CreateEconomicPage> {
                       formControl: foodPrice,
                       decoration: InputDecoration(
                         isDense: true,
-                        errorStyle: const TextStyle(height: 0),
+                        errorStyle: const TextStyle(height: 0.001),
                         errorText: null,
                         labelText: S.of(context).ovqatNarxi1kgSom,
                         labelStyle: CustomTextStyle.hint,
@@ -509,7 +543,7 @@ class _CreateEconomicPageState extends State<CreateEconomicPage> {
                       formControl: amountFeedPerKg,
                       decoration: InputDecoration(
                         isDense: true,
-                        errorStyle: const TextStyle(height: 0),
+                        errorStyle: const TextStyle(height: 0.001),
                         errorText: null,
                         labelText: S.of(context).kgBaliqqaSarflanadiganOzuqaKg,
                         labelStyle: CustomTextStyle.hint,
@@ -535,7 +569,7 @@ class _CreateEconomicPageState extends State<CreateEconomicPage> {
                       formControl: salary,
                       decoration: InputDecoration(
                         isDense: true,
-                        errorStyle: const TextStyle(height: 0),
+                        errorStyle: const TextStyle(height: 0.001),
                         errorText: null,
                         labelText: S.of(context).jamiIshchilarOyligioyKesimida,
                         labelStyle: CustomTextStyle.hint,
@@ -565,7 +599,7 @@ class _CreateEconomicPageState extends State<CreateEconomicPage> {
                       formControl: period,
                       decoration: InputDecoration(
                         isDense: true,
-                        errorStyle: const TextStyle(height: 0),
+                        errorStyle: const TextStyle(height: 0.001),
                         errorText: null,
                         labelText: S.of(context).baliqYetishtirishMuddatiOy,
                         labelStyle: CustomTextStyle.hint,
@@ -591,7 +625,7 @@ class _CreateEconomicPageState extends State<CreateEconomicPage> {
                       formControl: plannedPriceFish,
                       decoration: InputDecoration(
                         isDense: true,
-                        errorStyle: const TextStyle(height: 0),
+                        errorStyle: const TextStyle(height: 0.001),
                         errorText: null,
                         labelText: S.of(context).sotishRejalashtirilganBaliqNarxiSom,
                         labelStyle: CustomTextStyle.hint,
@@ -621,7 +655,7 @@ class _CreateEconomicPageState extends State<CreateEconomicPage> {
                       formControl: currentPriceFish,
                       decoration: InputDecoration(
                         isDense: true,
-                        errorStyle: const TextStyle(height: 0),
+                        errorStyle: const TextStyle(height: 0.001),
                         errorText: null,
                         labelText: S.of(context).tashalayotganBaliqlarNarxiSom,
                         labelStyle: CustomTextStyle.hint,
@@ -651,7 +685,7 @@ class _CreateEconomicPageState extends State<CreateEconomicPage> {
                       formControl: utilityBills,
                       decoration: InputDecoration(
                         isDense: true,
-                        errorStyle: const TextStyle(height: 0),
+                        errorStyle: const TextStyle(height: 0.001),
                         errorText: null,
                         labelText: S.of(context).kamunalTolovlarOyKesimida,
                         labelStyle: CustomTextStyle.hint,
@@ -681,7 +715,7 @@ class _CreateEconomicPageState extends State<CreateEconomicPage> {
                       formControl: taxExpenses,
                       decoration: InputDecoration(
                         isDense: true,
-                        errorStyle: const TextStyle(height: 0),
+                        errorStyle: const TextStyle(height: 0.001),
                         errorText: null,
                         labelText: S.of(context).soliqHarajatlariOyKesimida,
                         labelStyle: CustomTextStyle.hint,
@@ -711,7 +745,7 @@ class _CreateEconomicPageState extends State<CreateEconomicPage> {
                       formControl: otherExpenses,
                       decoration: InputDecoration(
                         isDense: true,
-                        errorStyle: const TextStyle(height: 0),
+                        errorStyle: const TextStyle(height: 0.001),
                         errorText: null,
                         labelText: S.of(context).boshqaHarajatlarBenzinDoridarmonVaBoshqalarSomOyKesimida,
                         labelStyle: CustomTextStyle.hint,
@@ -736,6 +770,8 @@ class _CreateEconomicPageState extends State<CreateEconomicPage> {
                 ],
               ),
             );
+  },
+);
           },
         ),
       ),

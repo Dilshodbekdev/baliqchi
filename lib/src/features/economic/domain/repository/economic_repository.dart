@@ -1,9 +1,11 @@
 import 'package:baliqchi/src/core/resources/data_state.dart';
 import 'package:baliqchi/src/features/economic/data/bodies/create_economic_body.dart';
 import 'package:baliqchi/src/features/economic/data/bodies/expense_month_body.dart';
+import 'package:baliqchi/src/features/economic/data/bodies/filter_body.dart';
 import 'package:baliqchi/src/features/economic/data/models/default_model.dart';
 import 'package:baliqchi/src/features/economic/data/models/details_economic_model.dart';
 import 'package:baliqchi/src/features/economic/data/models/economics_model.dart';
+import 'package:baliqchi/src/features/economic/data/models/expense_month_statistic_model.dart';
 import 'package:baliqchi/src/features/economic/data/models/expense_type_model.dart';
 import 'package:baliqchi/src/features/economic/data/models/expenses_month_model.dart';
 import 'package:baliqchi/src/features/home/data/bodies/paging_body.dart';
@@ -29,6 +31,8 @@ abstract class EconomicRepository {
   Future<DataState<List<FishTypes>>> foodTypes();
 
   Future<DataState<List<ExpenseTypeModel>>> expenseTypes();
+
+  Future<DataState<List<ExpenseMonthStatisticModel>>> expenseMonthStatistics(FilterBody body);
 
   Future<DataState<List<TechnologyModel>>> technologies();
 }

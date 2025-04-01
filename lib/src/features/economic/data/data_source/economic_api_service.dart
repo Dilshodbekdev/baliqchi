@@ -3,6 +3,7 @@ import 'package:baliqchi/src/features/economic/data/bodies/expense_month_body.da
 import 'package:baliqchi/src/features/economic/data/models/default_model.dart';
 import 'package:baliqchi/src/features/economic/data/models/details_economic_model.dart';
 import 'package:baliqchi/src/features/economic/data/models/economics_model.dart';
+import 'package:baliqchi/src/features/economic/data/models/expense_month_statistic_model.dart';
 import 'package:baliqchi/src/features/economic/data/models/expense_type_model.dart';
 import 'package:baliqchi/src/features/economic/data/models/expenses_month_model.dart';
 import 'package:baliqchi/src/features/home/data/models/place_details_model.dart';
@@ -19,9 +20,10 @@ abstract class EconomicApiService {
   /// URLS
   static const String _economics = 'api/v1/economic-indicators/all';
   static const String _expensesMonth = 'api/v1/expense-month';
+  static const String _expenseMonthStatistics = 'api/v1/expense-month/statistics';
   static const String _createEconomics = 'api/v1/economic-indicators';
   static const String _detailsEconomics = 'api/v1/economic-indicators/{id}';
-  static const String _fishTypes = 'api/v1/fish-types';
+  static const String _fishTypes = 'api/v1/fish-types/for-feeding';
   static const String _foodTypes = 'api/v1/food-types';
   static const String _expenseTypes = 'api/v1/expense-types';
   static const String _technologies = 'api/v1/technologies/all';
@@ -36,10 +38,10 @@ abstract class EconomicApiService {
 
   @GET(_expensesMonth)
   Future<HttpResponse<ExpensesMonthModel>> expensesMonth(
-      @Query('page') int page,
-      @Query('size') int size,
-      @Query('search') String? search,
-      );
+    @Query('page') int page,
+    @Query('size') int size,
+    @Query('search') String? search,
+  );
 
   @GET(_detailsEconomics)
   Future<HttpResponse<DetailsEconomicModel>> detailsEconomics(
@@ -68,4 +70,10 @@ abstract class EconomicApiService {
 
   @GET(_expenseTypes)
   Future<HttpResponse<List<ExpenseTypeModel>>> expenseTypes();
+
+  @GET(_expenseMonthStatistics)
+  Future<HttpResponse<List<ExpenseMonthStatisticModel>>> expenseMonthStatistics(
+    @Query('startDate') String? startDate,
+    @Query('endDate') String? endDate,
+  );
 }

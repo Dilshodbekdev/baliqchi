@@ -26,7 +26,7 @@ class AppElevatedButton extends StatelessWidget {
           text,
           style: TextStyle(
             color: textColor??Colors.white,
-            fontSize: 16,
+            fontSize: 14,
           ),
           textAlign: TextAlign.center,
         ),

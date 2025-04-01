@@ -1,18 +1,14 @@
 import 'package:baliqchi/generated/l10n.dart';
 import 'package:baliqchi/src/config/components/app_container.dart';
-import 'package:baliqchi/src/config/components/app_elevated_button.dart';
 import 'package:baliqchi/src/config/components/app_row.dart';
 import 'package:baliqchi/src/config/theme/app_colors.dart';
 import 'package:baliqchi/src/config/theme/text_styles.dart';
 import 'package:baliqchi/src/core/app_state/cubit/app_cubit.dart';
-import 'package:baliqchi/src/core/router/app_routes.dart';
 import 'package:baliqchi/src/features/home/data/models/billing_model.dart';
-import 'package:baliqchi/src/features/home/data/models/definition_model.dart';
 import 'package:baliqchi/src/features/home/presentation/manager/home_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 
 class BillingsPage extends StatefulWidget {
   const BillingsPage({super.key});
@@ -59,7 +55,7 @@ class _BillingsPageState extends State<BillingsPage> {
                     itemCount: state.billings?.length,
                     itemBuilder: (context, index) {
                       return buildNewsItem(
-                          context, state.billings?[index], index);
+                          context, state.billings?[index], index,appState.lang);
                     }),
             );
           },
@@ -68,7 +64,7 @@ class _BillingsPageState extends State<BillingsPage> {
     );
   }
 
-  Widget buildNewsItem(BuildContext context, BillingModel? model, int index) {
+  Widget buildNewsItem(BuildContext context, BillingModel? model, int index,String lang) {
     return AppContainer(
       padding: const EdgeInsets.all(8),
       margin: const EdgeInsets.symmetric(vertical: 8),
@@ -80,7 +76,7 @@ class _BillingsPageState extends State<BillingsPage> {
         children: [
           AppRow(
               text1: S.of(context).tarifTuri,
-              text2: model?.paymentTypeUz ?? '--'),
+              text2: lang=='uz'? model?.paymentTypeUz ?? '--':model?.paymentTypeRu ?? '--'),
           AppRow(
               text1: S.of(context).tolovSummasi,
               text2: model?.price.toString() ?? '--'),

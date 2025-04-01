@@ -7,6 +7,7 @@ import 'package:baliqchi/src/features/calculator/presentation/manager/calculator
 import 'package:baliqchi/src/features/diseases/presentation/manager/disease_bloc.dart';
 import 'package:baliqchi/src/features/economic/presentation/manager/economic_bloc.dart';
 import 'package:baliqchi/src/features/home/presentation/manager/home_bloc.dart';
+import 'package:baliqchi/src/features/main/manger/main_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -26,6 +27,7 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
         providers: [
           BlocProvider(create: (context) => locator<AppCubit>()..init()),
+          BlocProvider(create: (context) => locator<MainCubit>()..init()),
           BlocProvider(create: (context) => locator<AuthBloc>()),
           BlocProvider(create: (context) => locator<HomeBloc>()),
           BlocProvider(create: (context) => locator<DiseaseBloc>()),
@@ -53,7 +55,7 @@ class MyApp extends StatelessWidget {
                   bottomNavigationBarTheme: const BottomNavigationBarThemeData(
                     backgroundColor: Colors.white
                   ),
-                  fontFamily: 'Poppins'
+                  useMaterial3: true
                 ),
                 routeInformationParser: appRouter.routeInformationParser,
                 routeInformationProvider: appRouter.routeInformationProvider,

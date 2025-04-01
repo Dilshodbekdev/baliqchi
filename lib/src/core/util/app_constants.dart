@@ -13,7 +13,9 @@ class AppConstants {
   static const kLanguage = "language";
   static const kDark = "is_dark";
 
-  static const baseUrl = "https://bk.technocorp.uz/";
+  static const baseUrlServer = "https://bk.technocorp.uz/";
+  static const baseUrlLocal = "http://192.168.1.146:8083/";
   static const baseUrl1 = "https://bk.technocorp.uz";
+  static const baseUrl = "https://bk.technocorp.uz/";
   static const redirectUrl = "https://xn.technocorp.uz/api/one-id/432fdsfHHDSFG213__LL-123QWE";
 }

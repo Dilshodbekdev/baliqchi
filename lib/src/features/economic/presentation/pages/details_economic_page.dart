@@ -1,11 +1,12 @@
 import 'package:baliqchi/generated/l10n.dart';
 import 'package:baliqchi/src/config/components/app_container.dart';
 import 'package:baliqchi/src/config/components/app_divider.dart';
-import 'package:baliqchi/src/config/components/app_row.dart';
 import 'package:baliqchi/src/config/components/text_field_components.dart';
 import 'package:baliqchi/src/config/theme/app_colors.dart';
 import 'package:baliqchi/src/config/theme/text_styles.dart';
+import 'package:baliqchi/src/core/util/funs.dart';
 import 'package:baliqchi/src/features/economic/presentation/manager/economic_bloc.dart';
+import 'package:baliqchi/src/features/economic/presentation/pages/widgets/details_economic_list_tile.dart';
 import 'package:baliqchi/src/features/home/data/bodies/paging_body.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -27,7 +28,9 @@ class _DetailsEconomicPageState extends State<DetailsEconomicPage> {
   late final bloc = context.read<EconomicBloc>();
 
   final form = FormGroup({
-    'price': FormControl<String>(validators: [Validators.required,]),
+    'price': FormControl<String>(validators: [
+      Validators.required,
+    ]),
   });
 
   FormControl<String> get price => form.control('price') as FormControl<String>;
@@ -56,19 +59,12 @@ class _DetailsEconomicPageState extends State<DetailsEconomicPage> {
                   children: [
                     PieChart(
                       dataMap: {
-                        S.of(context).tashalayotganBaliqlarNarxi:
-                            state.detailsEconomicModel?.fishPrice?.toDouble() ??
-                                0,
-                        S.of(context).ozuqagaSarflanganHarajat:
-                            state.detailsEconomicModel?.foodPrice ?? 0,
-                        S.of(context).kamunalTolovlar:
-                            state.detailsEconomicModel?.utilityBills ?? 0,
-                        S.of(context).soliqHarajatlari:
-                            state.detailsEconomicModel?.taxExpenses ?? 0,
-                        S.of(context).jamiIshchilarOyligi:
-                            state.detailsEconomicModel?.totalSalary ?? 0,
-                        S.of(context).boshqaHarajatlar:
-                            state.detailsEconomicModel?.otherExpenses ?? 0,
+                        S.of(context).tashalayotganBaliqlarNarxi: state.detailsEconomicModel?.fishPrice?.toDouble() ?? 0,
+                        S.of(context).ozuqagaSarflanganHarajat: state.detailsEconomicModel?.totalFoodPrice ?? 0,
+                        S.of(context).kamunalTolovlar: state.detailsEconomicModel?.utilityBills ?? 0,
+                        S.of(context).soliqHarajatlari: state.detailsEconomicModel?.taxExpenses ?? 0,
+                        S.of(context).jamiIshchilarOyligi: state.detailsEconomicModel?.totalSalary ?? 0,
+                        S.of(context).boshqaHarajatlar: state.detailsEconomicModel?.otherExpenses ?? 0,
                       },
                       animationDuration: const Duration(milliseconds: 800),
                       chartLegendSpacing: 32,
@@ -84,8 +80,8 @@ class _DetailsEconomicPageState extends State<DetailsEconomicPage> {
                       initialAngleInDegree: 0,
                       chartType: ChartType.ring,
                       ringStrokeWidth: 28,
-                      centerText:
-                          "${state.detailsEconomicModel?.totalExpense ?? ''}\nso'm",
+                      centerText: getCurrencySymbol(
+                          state.detailsEconomicModel?.totalExpense ?? 0),
                       centerTextStyle: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
@@ -109,142 +105,47 @@ class _DetailsEconomicPageState extends State<DetailsEconomicPage> {
                       // gradientList: ---To add gradient colors---
                       // emptyColorGradient: ---Empty Color gradient---
                     ),
-                    const SizedBox(
-                      height: 16,
-                    ),
+                    const SizedBox(height: 16),
                     const AppDivider(),
-                    ListTile(
-                      title: Text(
-                        S.of(context).tashalayotganBaliqlarNarxi,
-                        style: CustomTextStyle.h16R,
-                      ),
-                      trailing: Text(
-                        state.detailsEconomicModel?.fishPrice?.toString() ??
-                            '--',
-                        style: CustomTextStyle.h16M,
-                      ),
-                      leading: Container(
-                        height: 12,
-                        width: 12,
-                        decoration: const BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: AppColors.amountFishColor),
-                      ),
-                      contentPadding: const EdgeInsets.all(0),
-                      dense: true,
+                    DetailsEconomicListTile(
+                      color: AppColors.amountFishColor,
+                      title: S.of(context).tashalayotganBaliqlarNarxi,
+                      currency: getCurrencySymbol(
+                          state.detailsEconomicModel?.fishPrice ?? 0),
                     ),
-                    const AppDivider(),
-                    ListTile(
-                      title: Text(
-                        S.of(context).ozuqagaSarflanganHarajat,
-                        style: CustomTextStyle.h16R,
-                      ),
-                      trailing: Text(
-                        state.detailsEconomicModel?.foodPrice?.toString() ??
-                            '--',
-                        style: CustomTextStyle.h16M,
-                      ),
-                      leading: Container(
-                        height: 12,
-                        width: 12,
-                        decoration: const BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: AppColors.foodPriceColor),
-                      ),
-                      contentPadding: const EdgeInsets.all(0),
-                      dense: true,
+                    DetailsEconomicListTile(
+                      color: AppColors.foodPriceColor,
+                      title: S.of(context).ozuqagaSarflanganHarajat,
+                      currency: getCurrencySymbol(
+                          state.detailsEconomicModel?.totalFoodPrice ?? 0),
                     ),
-                    const AppDivider(),
-                    ListTile(
-                      title: Text(
-                        S.of(context).kamunalTolovlar,
-                        style: CustomTextStyle.h16R,
-                      ),
-                      trailing: Text(
-                        state.detailsEconomicModel?.utilityBills?.toString() ??
-                            '--',
-                        style: CustomTextStyle.h16M,
-                      ),
-                      leading: Container(
-                        height: 12,
-                        width: 12,
-                        decoration: const BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: AppColors.utilityBillsColor),
-                      ),
-                      contentPadding: const EdgeInsets.all(0),
-                      dense: true,
+                    DetailsEconomicListTile(
+                        color: AppColors.utilityBillsColor,
+                        title: S.of(context).kamunalTolovlar,
+                        currency: getCurrencySymbol(
+                            state.detailsEconomicModel?.utilityBills ?? 0)),
+                    DetailsEconomicListTile(
+                      color: AppColors.taxExpensesColor,
+                      title: S.of(context).soliqHarajatlari,
+                      currency: getCurrencySymbol(
+                          state.detailsEconomicModel?.taxExpenses ?? 0),
                     ),
-                    const AppDivider(),
-                    ListTile(
-                      title: Text(
-                        S.of(context).soliqHarajatlari,
-                        style: CustomTextStyle.h16R,
-                      ),
-                      trailing: Text(
-                        state.detailsEconomicModel?.taxExpenses?.toString() ??
-                            '--',
-                        style: CustomTextStyle.h16M,
-                      ),
-                      leading: Container(
-                        height: 12,
-                        width: 12,
-                        decoration: const BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: AppColors.taxExpensesColor),
-                      ),
-                      contentPadding: const EdgeInsets.all(0),
-                      dense: true,
+                    DetailsEconomicListTile(
+                      color: AppColors.totalSalaryColor,
+                      title: S.of(context).jamiIshchilarOyligi,
+                      currency: getCurrencySymbol(
+                          state.detailsEconomicModel?.totalSalary ?? 0),
                     ),
-                    const AppDivider(),
-                    ListTile(
-                      title: Text(
-                        S.of(context).jamiIshchilarOyligi,
-                        style: CustomTextStyle.h16R,
-                      ),
-                      trailing: Text(
-                        state.detailsEconomicModel?.totalSalary?.toString() ??
-                            '--',
-                        style: CustomTextStyle.h16M,
-                      ),
-                      leading: Container(
-                        height: 12,
-                        width: 12,
-                        decoration: const BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: AppColors.totalSalaryColor),
-                      ),
-                      contentPadding: const EdgeInsets.all(0),
-                      dense: true,
+                    DetailsEconomicListTile(
+                      color: AppColors.otherExpensesColor,
+                      title: S.of(context).boshqaHarajatlar,
+                      currency: getCurrencySymbol(
+                          state.detailsEconomicModel?.otherExpenses ?? 0),
                     ),
-                    const AppDivider(),
-                    ListTile(
-                      title: Text(
-                        S.of(context).boshqaHarajatlar,
-                        style: CustomTextStyle.h16R,
-                      ),
-                      trailing: Text(
-                        state.detailsEconomicModel?.otherExpenses?.toString() ??
-                            '--',
-                        style: CustomTextStyle.h16M,
-                      ),
-                      leading: Container(
-                        height: 12,
-                        width: 12,
-                        decoration: const BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: AppColors.otherExpensesColor),
-                      ),
-                      contentPadding: const EdgeInsets.all(0),
-                      dense: true,
-                    ),
-                    const AppDivider(),
                   ],
                 ),
               ),
-              const SizedBox(
-                height: 8,
-              ),
+              const SizedBox(height: 8),
               ReactiveForm(
                 formGroup: form,
                 child: AppContainer(
@@ -260,9 +161,9 @@ class _DetailsEconomicPageState extends State<DetailsEconomicPage> {
                             ),
                           ),
                           Text(
-                            state.detailsEconomicModel?.plannedPriceFish
-                                    .toString() ??
-                                '--',
+                            getCurrencySymbol(
+                                state.detailsEconomicModel?.plannedPriceFish ??
+                                    0),
                             style: const TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w500,
@@ -270,9 +171,7 @@ class _DetailsEconomicPageState extends State<DetailsEconomicPage> {
                           )
                         ],
                       ),
-                      const SizedBox(
-                        height: 8,
-                      ),
+                      const SizedBox(height: 8),
                       Row(
                         children: [
                           Expanded(
@@ -281,7 +180,7 @@ class _DetailsEconomicPageState extends State<DetailsEconomicPage> {
                               formControl: price,
                               decoration: InputDecoration(
                                 isDense: true,
-                                errorStyle: const TextStyle(height: 0),
+                                errorStyle: const TextStyle(height: 0.001),
                                 errorText: null,
                                 hintText: S.of(context).baliqNarxi,
                                 hintStyle: CustomTextStyle.hint,
@@ -301,8 +200,8 @@ class _DetailsEconomicPageState extends State<DetailsEconomicPage> {
                               ],
                             ),
                           ),
-                          const SizedBox(width: 16,),
-                          ReactiveFormConsumer(builder: (context,form,child){
+                          const SizedBox(width: 16),
+                          ReactiveFormConsumer(builder: (context, form, child) {
                             return SizedBox(
                               height: 48,
                               width: 56,
@@ -314,13 +213,20 @@ class _DetailsEconomicPageState extends State<DetailsEconomicPage> {
                                     ),
                                   ),
                                   onPressed: () {
-                                    if(form.valid){
-                                      bloc.updateEconomic(PagingBody(id: widget.id,price: double.parse(price.value?.replaceAll(' ', '')??'0')));
-                                    }else{
+                                    if (form.valid) {
+                                      bloc.updateEconomic(PagingBody(
+                                          id: widget.id,
+                                          price: double.parse(price.value
+                                                  ?.replaceAll(' ', '') ??
+                                              '0')));
+                                    } else {
                                       form.markAllAsTouched();
                                     }
                                   },
-                                  icon: const Icon(Icons.currency_exchange,color: Colors.white,)),
+                                  icon: const Icon(
+                                    Icons.currency_exchange,
+                                    color: Colors.white,
+                                  )),
                             );
                           })
                         ],
@@ -329,9 +235,7 @@ class _DetailsEconomicPageState extends State<DetailsEconomicPage> {
                   ),
                 ),
               ),
-              const SizedBox(
-                height: 8,
-              ),
+              const SizedBox(height: 8),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -352,7 +256,20 @@ class _DetailsEconomicPageState extends State<DetailsEconomicPage> {
                                 style: CustomTextStyle.hint,
                               ),
                               Text(
-                                "${state.detailsEconomicModel?.totalExpense.toString()} so'm",
+                                getCurrencySymbol((state
+                                            .detailsEconomicModel?.fishPrice ??
+                                        0) +
+                                    (state.detailsEconomicModel
+                                            ?.totalFoodPrice ??
+                                        0) +
+                                    (state.detailsEconomicModel?.utilityBills ??
+                                        0) +
+                                    (state.detailsEconomicModel?.taxExpenses ??
+                                        0) +
+                                    (state.detailsEconomicModel?.totalSalary ??
+                                        0) +
+                                    (state.detailsEconomicModel?.otherExpenses ??
+                                        0)),
                                 style: const TextStyle(
                                     fontSize: 24,
                                     color: Colors.red,
@@ -361,9 +278,7 @@ class _DetailsEconomicPageState extends State<DetailsEconomicPage> {
                             ],
                           ),
                         ),
-                        const SizedBox(
-                          height: 8
-                        ),
+                        const SizedBox(height: 8),
                         AppContainer(
                           margin: EdgeInsets.zero,
                           child: Column(
@@ -378,7 +293,8 @@ class _DetailsEconomicPageState extends State<DetailsEconomicPage> {
                                 style: CustomTextStyle.hint,
                               ),
                               Text(
-                                "${state.detailsEconomicModel?.income.toString()} so'm",
+                                getCurrencySymbol(
+                                    state.detailsEconomicModel?.income ?? 0),
                                 style: const TextStyle(
                                     fontSize: 24, fontWeight: FontWeight.w600),
                               ),
@@ -388,9 +304,7 @@ class _DetailsEconomicPageState extends State<DetailsEconomicPage> {
                       ],
                     ),
                   ),
-                  const SizedBox(
-                    width: 8,
-                  ),
+                  const SizedBox(width: 8),
                   Expanded(
                     child: Column(
                       children: [
@@ -408,7 +322,20 @@ class _DetailsEconomicPageState extends State<DetailsEconomicPage> {
                                 style: CustomTextStyle.hint,
                               ),
                               Text(
-                                "${state.detailsEconomicModel?.profit.toString()} so'm",
+                                getCurrencySymbol((state.detailsEconomicModel?.income ?? 0)-((state
+                                    .detailsEconomicModel?.fishPrice ??
+                                    0) +
+                                    (state.detailsEconomicModel
+                                        ?.totalFoodPrice ??
+                                        0) +
+                                    (state.detailsEconomicModel?.utilityBills ??
+                                        0) +
+                                    (state.detailsEconomicModel?.taxExpenses ??
+                                        0) +
+                                    (state.detailsEconomicModel?.totalSalary ??
+                                        0) +
+                                    (state.detailsEconomicModel?.otherExpenses ??
+                                        0))),
                                 style: const TextStyle(
                                     fontSize: 24,
                                     color: Colors.green,
@@ -417,9 +344,7 @@ class _DetailsEconomicPageState extends State<DetailsEconomicPage> {
                             ],
                           ),
                         ),
-                        const SizedBox(
-                          height: 8,
-                        ),
+                        const SizedBox(height: 8),
                         AppContainer(
                           margin: EdgeInsets.zero,
                           child: Column(
@@ -434,7 +359,9 @@ class _DetailsEconomicPageState extends State<DetailsEconomicPage> {
                                 style: CustomTextStyle.hint,
                               ),
                               Text(
-                                "${state.detailsEconomicModel?.priceKgFish.toString()} so'm",
+                                getCurrencySymbol(
+                                    state.detailsEconomicModel?.priceKgFish ??
+                                        0),
                                 style: const TextStyle(
                                     fontSize: 24, fontWeight: FontWeight.w600),
                               ),

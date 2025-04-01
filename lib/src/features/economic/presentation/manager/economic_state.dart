@@ -7,11 +7,13 @@ class EconomicState {
   final List<FishTypes>? fishTypes;
   final List<FishTypes>? foodTypes;
   final List<ExpenseTypeModel>? expenseTypes;
+  final List<ExpenseMonthStatisticModel>? expenseMonthStatistics;
   final DefaultModel? createEconomic;
   final DefaultModel? createExpenseMonth;
   final List<TechnologyModel>? technologies;
   final bool isLoading;
   final bool isCreated;
+  final bool isCreatedExpenseMonth;
   final PagingBody? body;
   final PagingBody? body1;
   final bool isPaging;
@@ -28,11 +30,13 @@ class EconomicState {
     this.fishTypes,
     this.foodTypes,
     this.expenseTypes,
+    this.expenseMonthStatistics,
     this.createEconomic,
     this.createExpenseMonth,
     this.technologies,
     this.isLoading = false,
     this.isCreated = false,
+    this.isCreatedExpenseMonth = false,
     this.body,
     this.body1,
     this.isPaging = false,
@@ -50,11 +54,13 @@ class EconomicState {
     List<FishTypes>? fishTypes,
     List<FishTypes>? foodTypes,
     List<ExpenseTypeModel>? expenseTypes,
+    List<ExpenseMonthStatisticModel>? expenseMonthStatistics,
     DefaultModel? createEconomic,
     DefaultModel? createExpenseMonth,
     List<TechnologyModel>? technologies,
     bool? isLoading,
     bool? isCreated,
+    bool? isCreatedExpenseMonth,
     PagingBody? body,
     PagingBody? body1,
     bool? isPaging,
@@ -71,11 +77,13 @@ class EconomicState {
         fishTypes: fishTypes ?? this.fishTypes,
         foodTypes: foodTypes ?? this.foodTypes,
         expenseTypes: expenseTypes ?? this.expenseTypes,
+        expenseMonthStatistics: expenseMonthStatistics ?? this.expenseMonthStatistics,
         createEconomic: createEconomic ?? this.createEconomic,
         createExpenseMonth: createExpenseMonth ?? this.createExpenseMonth,
         technologies: technologies ?? this.technologies,
         isLoading: isLoading ?? false,
         isCreated: isCreated ?? false,
+        isCreatedExpenseMonth: isCreatedExpenseMonth ?? false,
         body: body ?? this.body,
         body1: body1 ?? this.body1,
         isPaging: isPaging ?? false,

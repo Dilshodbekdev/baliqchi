@@ -14,6 +14,12 @@ class ExpensesMonthEvent extends EconomicEvent {
   ExpensesMonthEvent({required this.isPaging});
 }
 
+class ExpenseMonthStatisticsEvent extends EconomicEvent {
+  final FilterBody body;
+
+  ExpenseMonthStatisticsEvent({required this.body});
+}
+
 class CreateEconomicEvent extends EconomicEvent {
   final CreateEconomicBody body;
 

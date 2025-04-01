@@ -21,7 +21,8 @@ class DetailsEconomicModel {
       this.fishPrice, 
       this.amountFish, 
       this.foodPrice, 
-      this.utilityBills, 
+      this.totalFoodPrice,
+      this.utilityBills,
       this.taxExpenses, 
       this.otherExpenses, 
       this.profit, 
@@ -36,6 +37,7 @@ class DetailsEconomicModel {
     fishPrice = json['fishPrice'];
     amountFish = json['amountFish'];
     foodPrice = json['foodPrice'];
+    totalFoodPrice = json['totalFoodPrice'];
     utilityBills = json['utilityBills'];
     taxExpenses = json['taxExpenses'];
     otherExpenses = json['otherExpenses'];
@@ -50,6 +52,7 @@ class DetailsEconomicModel {
   double? fishPrice;
   int? amountFish;
   double? foodPrice;
+  double? totalFoodPrice;
   double? utilityBills;
   double? taxExpenses;
   double? otherExpenses;
@@ -66,6 +69,7 @@ class DetailsEconomicModel {
     map['fishPrice'] = fishPrice;
     map['amountFish'] = amountFish;
     map['foodPrice'] = foodPrice;
+    map['totalFoodPrice'] = totalFoodPrice;
     map['utilityBills'] = utilityBills;
     map['taxExpenses'] = taxExpenses;
     map['otherExpenses'] = otherExpenses;

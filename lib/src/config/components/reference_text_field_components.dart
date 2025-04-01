@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
 OutlineInputBorder appReferenceTextFiledBorder() {
-  return OutlineInputBorder(
+  return const OutlineInputBorder(
     borderRadius: BorderRadius.all(Radius.circular(8)),
-    borderSide: const BorderSide(color: Colors.transparent),
+    borderSide: BorderSide(color: Colors.transparent),
   );
 }
 
 OutlineInputBorder appReferenceTextFiledErrorBorder() {
-  return OutlineInputBorder(
+  return const OutlineInputBorder(
     borderRadius: BorderRadius.all(Radius.circular(8)),
-    borderSide: const BorderSide(color: Colors.red),
+    borderSide: BorderSide(color: Colors.red),
   );
 }

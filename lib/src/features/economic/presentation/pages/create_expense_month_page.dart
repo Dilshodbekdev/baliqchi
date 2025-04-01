@@ -7,6 +7,7 @@ import 'package:baliqchi/src/config/components/app_row.dart';
 import 'package:baliqchi/src/config/components/text_field_components.dart';
 import 'package:baliqchi/src/config/theme/app_colors.dart';
 import 'package:baliqchi/src/config/theme/text_styles.dart';
+import 'package:baliqchi/src/core/app_state/cubit/app_cubit.dart';
 import 'package:baliqchi/src/features/economic/data/bodies/expense_month_body.dart';
 import 'package:baliqchi/src/features/economic/data/models/expense_type_model.dart';
 import 'package:baliqchi/src/features/economic/presentation/manager/economic_bloc.dart';
@@ -17,6 +18,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:reactive_date_time_picker/reactive_date_time_picker.dart';
 import 'package:reactive_forms/reactive_forms.dart';
+import 'package:toastification/toastification.dart';
 
 class CreateExpenseMonthPage extends StatefulWidget {
   const CreateExpenseMonthPage({super.key});
@@ -75,13 +77,38 @@ class _CreateExpenseMonthPageState extends State<CreateExpenseMonthPage> {
         appBar: AppBar(
           title: Text(S.of(context).oylikHarajatlarniKiritish),
         ),
-        body: BlocBuilder<EconomicBloc, EconomicState>(
-          builder: (context, state) {
-            if(state.isCreated){
+        body: BlocConsumer<EconomicBloc, EconomicState>(
+          listener: (context,state){
+            if(state.isCreatedExpenseMonth){
+              toastification.show(
+                  title: Text(state.createExpenseMonth?.message??'--'),
+                  type: ToastificationType.info,
+                  alignment: Alignment.bottomCenter,
+                  showProgressBar: false,
+                  icon: const Icon(Icons.check_circle_outline),
+                  style: ToastificationStyle.fillColored,
+                  autoCloseDuration: 4.seconds,
+                  primaryColor: AppColors.mainGreenColor
+              );
               bloc.expensesMonth();
               context.pop();
             }
-            return SingleChildScrollView(
+            if(state.hasError){
+              toastification.show(
+                  title: Text(state.errorMessage,style:  const TextStyle(fontSize: 16),),
+                  type: ToastificationType.error,
+                  alignment: Alignment.bottomCenter,
+                  showProgressBar: false,
+                  style: ToastificationStyle.fillColored,
+                  autoCloseDuration: 4.seconds,
+                  primaryColor: AppColors.mainRedColor
+              );
+            }
+          },
+          builder: (context, state) {
+            return BlocBuilder<AppCubit, AppState>(
+  builder: (context, appState) {
+    return SingleChildScrollView(
               padding: const EdgeInsets.all(16),
               child: Column(
                 children: [
@@ -95,7 +122,7 @@ class _CreateExpenseMonthPageState extends State<CreateExpenseMonthPage> {
                         isDense: true,
                         filled: true,
                         fillColor: Colors.white,
-                        errorStyle: const TextStyle(height: 0),
+                        errorStyle: const TextStyle(height: 0.001),
                         labelText: S.of(context).harajatTuri,
                         labelStyle: CustomTextStyle.hint,
                         border: appTextFiledTransparentBorder(),
@@ -109,7 +136,7 @@ class _CreateExpenseMonthPageState extends State<CreateExpenseMonthPage> {
                             return DropdownMenuItem(
                               value: e.id,
                               child: Text(
-                                e.nameUz ?? "--",
+                                appState.lang=='uz'? e.nameUz ?? "--":e.nameRu ?? "--",
                                 style: CustomTextStyle.h16M,
                               ),
                             );
@@ -130,7 +157,7 @@ class _CreateExpenseMonthPageState extends State<CreateExpenseMonthPage> {
                       formControl: expenseName,
                       decoration: InputDecoration(
                         isDense: true,
-                        errorStyle: const TextStyle(height: 0),
+                        errorStyle: const TextStyle(height: 0.001),
                         errorText: null,
                         labelText: S.of(context).harajatNomi,
                         labelStyle: CustomTextStyle.hint,
@@ -144,7 +171,6 @@ class _CreateExpenseMonthPageState extends State<CreateExpenseMonthPage> {
                       validationMessages: {
                         'required': (error) => '',
                       },
-                      keyboardType: TextInputType.number,
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -156,7 +182,7 @@ class _CreateExpenseMonthPageState extends State<CreateExpenseMonthPage> {
                       formControl: expenseAmount,
                       decoration: InputDecoration(
                         isDense: true,
-                        errorStyle: const TextStyle(height: 0),
+                        errorStyle: const TextStyle(height: 0.001),
                         errorText: null,
                         labelText: S.of(context).harajatMiqdoriSom,
                         labelStyle: CustomTextStyle.hint,
@@ -182,7 +208,7 @@ class _CreateExpenseMonthPageState extends State<CreateExpenseMonthPage> {
                       dateFormat: DateFormat('yyyy-MM-dd'),
                       decoration: InputDecoration(
                         isDense: true,
-                        errorStyle: const TextStyle(height: 0),
+                        errorStyle: const TextStyle(height: 0.001),
                         errorText: null,
                         labelText: S.of(context).oyniTanlang,
                         labelStyle: CustomTextStyle.hint,
@@ -247,18 +273,20 @@ class _CreateExpenseMonthPageState extends State<CreateExpenseMonthPage> {
                       padding: const EdgeInsets.symmetric(horizontal: 8),
                       itemCount: expenseMonthBody.length,
                       itemBuilder: (context, index) {
-                        return buildNewsItem(context, expenseMonthBody[index], index,state.expenseTypes);
+                        return buildNewsItem(context, expenseMonthBody[index], index,state.expenseTypes,appState.lang);
                       }),
                 ],
               ),
             );
+  },
+);
           },
         ),
       ),
     );
   }
 
-  Widget buildNewsItem(BuildContext context, ExpenseMonthBody? model, int index,List<ExpenseTypeModel>? list) {
+  Widget buildNewsItem(BuildContext context, ExpenseMonthBody? model, int index,List<ExpenseTypeModel>? list,String lang) {
     return AppContainer(
       padding: const EdgeInsets.all(8),
       margin: const EdgeInsets.symmetric(vertical: 8),
@@ -270,7 +298,7 @@ class _CreateExpenseMonthPageState extends State<CreateExpenseMonthPage> {
         children: [
           AppRow(
               text1: S.of(context).harajatTuri,
-              text2: getExpenseType(list??[], model?.expenseTypeId??'')),
+              text2: getExpenseType(list??[], model?.expenseTypeId??'',lang)),
           AppRow(
               text1: S.of(context).harajatNomi,
               text2: model?.expenseName ?? '--'),
@@ -288,12 +316,12 @@ class _CreateExpenseMonthPageState extends State<CreateExpenseMonthPage> {
         duration: 200.ms);
   }
 
-  String getExpenseType(List<ExpenseTypeModel> list,String id){
+  String getExpenseType(List<ExpenseTypeModel> list,String id,String lang){
     String type='--';
     loop:
     for (var action in list) {
       if(action.id==id){
-        type=action.nameUz??'-';
+        type=lang=='uz'? (action.nameUz ?? "--"):(action.nameRu ?? "--");
         break loop;
       }
     }

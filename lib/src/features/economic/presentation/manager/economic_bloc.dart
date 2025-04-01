@@ -3,15 +3,18 @@ import 'dart:async';
 import 'package:baliqchi/src/core/resources/data_state.dart';
 import 'package:baliqchi/src/features/economic/data/bodies/create_economic_body.dart';
 import 'package:baliqchi/src/features/economic/data/bodies/expense_month_body.dart';
+import 'package:baliqchi/src/features/economic/data/bodies/filter_body.dart';
 import 'package:baliqchi/src/features/economic/data/models/default_model.dart';
 import 'package:baliqchi/src/features/economic/data/models/details_economic_model.dart';
 import 'package:baliqchi/src/features/economic/data/models/economics_model.dart';
+import 'package:baliqchi/src/features/economic/data/models/expense_month_statistic_model.dart';
 import 'package:baliqchi/src/features/economic/data/models/expense_type_model.dart';
 import 'package:baliqchi/src/features/economic/data/models/expenses_month_model.dart';
 import 'package:baliqchi/src/features/economic/domain/use_case/create_economic_use_case.dart';
 import 'package:baliqchi/src/features/economic/domain/use_case/create_expense_month_use_case.dart';
 import 'package:baliqchi/src/features/economic/domain/use_case/details_economic_use_case.dart';
 import 'package:baliqchi/src/features/economic/domain/use_case/economics_use_case.dart';
+import 'package:baliqchi/src/features/economic/domain/use_case/expense_month_statistics_use_case.dart';
 import 'package:baliqchi/src/features/economic/domain/use_case/expense_types_use_case.dart';
 import 'package:baliqchi/src/features/economic/domain/use_case/expenses_month_use_case.dart';
 import 'package:baliqchi/src/features/economic/domain/use_case/fish_types_use_case.dart';
@@ -38,6 +41,7 @@ class EconomicBloc extends Bloc<EconomicEvent, EconomicState> {
   final CreateExpenseMonthUseCase _createExpenseMonthUseCase;
   final DetailsEconomicUseCase _detailsEconomicUseCase;
   final UpdateEconomicUseCase _updateEconomicUseCase;
+  final ExpenseMonthStatisticsUseCase _expenseMonthStatisticsUseCase;
 
   EconomicBloc(
     this._economicsUseCase,
@@ -50,6 +54,7 @@ class EconomicBloc extends Bloc<EconomicEvent, EconomicState> {
     this._expensesMonthUseCase,
     this._expenseTypesUseCase,
     this._createExpenseMonthUseCase,
+    this._expenseMonthStatisticsUseCase,
   ) : super(EconomicState()) {
     on<EconomicsEvent>((event, emit) async {
       await emit.onEach(_onEconomics(event), onData: emit.call);
@@ -87,6 +92,10 @@ class EconomicBloc extends Bloc<EconomicEvent, EconomicState> {
       await emit.onEach(_onExpenseTypes(event), onData: emit.call);
     });
 
+    on<ExpenseMonthStatisticsEvent>((event, emit) async {
+      await emit.onEach(_onExpenseMonthStatistics(event), onData: emit.call);
+    });
+
     on<TechnologiesEvent>((event, emit) async {
       await emit.onEach(_onTechnologies(event), onData: emit.call);
     });
@@ -120,6 +129,10 @@ class EconomicBloc extends Bloc<EconomicEvent, EconomicState> {
     add(ExpenseTypesEvent());
   }
 
+  expenseMonthStatistics(FilterBody body) {
+    add(ExpenseMonthStatisticsEvent(body: body));
+  }
+
   technologies() {
     add(TechnologiesEvent());
   }
@@ -145,14 +158,13 @@ class EconomicBloc extends Bloc<EconomicEvent, EconomicState> {
       final page = event.isPaging ? (state.body?.page ?? 1) : 1;
       yield state.copyWith(
           isLoading: !event.isPaging, isPaging: event.isPaging);
-      final dataState = await _economicsUseCase.call(
-          params: PagingBody(page: page));
+      final dataState =
+          await _economicsUseCase.call(params: PagingBody(page: page));
 
       if (dataState is DataSuccess) {
         final newList = dataState.data?.content ?? [];
         yield state.copyWith(
-          economics:
-              state.isPaging ? [...state.economics, ...newList] : newList,
+          economics: state.isPaging ? [...state.economics, ...newList] : newList,
           reachedMax: newList.length < 10,
           body: (state.body ?? PagingBody()).copyWith(page: page + 1),
         );
@@ -220,6 +232,18 @@ class EconomicBloc extends Bloc<EconomicEvent, EconomicState> {
     }
   }
 
+  Stream<EconomicState> _onExpenseMonthStatistics(ExpenseMonthStatisticsEvent event) async* {
+    yield state.copyWith(isLoading: true);
+
+    final dataState = await _expenseMonthStatisticsUseCase.call(params: event.body);
+
+    if (dataState is DataSuccess) {
+      yield state.copyWith(expenseMonthStatistics: dataState.data);
+    } else if (dataState is DataFailed) {
+      yield state.copyWith(hasError: true, errorMessage: dataState.message);
+    }
+  }
+
   Stream<EconomicState> _onTechnologies(TechnologiesEvent event) async* {
     yield state.copyWith(isLoading: true);
 
@@ -244,13 +268,14 @@ class EconomicBloc extends Bloc<EconomicEvent, EconomicState> {
     }
   }
 
-  Stream<EconomicState> _onCreateExpenseMonth(CreateExpenseMonthEvent event) async* {
+  Stream<EconomicState> _onCreateExpenseMonth(
+      CreateExpenseMonthEvent event) async* {
     yield state.copyWith(isLoading: true);
 
     final dataState = await _createExpenseMonthUseCase.call(params: event.body);
 
     if (dataState is DataSuccess) {
-      yield state.copyWith(createExpenseMonth: dataState.data, isCreated: true);
+      yield state.copyWith(createExpenseMonth: dataState.data, isCreatedExpenseMonth: true);
     } else if (dataState is DataFailed) {
       yield state.copyWith(hasError: true, errorMessage: dataState.message);
     }

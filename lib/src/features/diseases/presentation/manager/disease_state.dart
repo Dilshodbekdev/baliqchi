@@ -2,7 +2,7 @@ part of 'disease_bloc.dart';
 
 class DiseaseState {
   final List<DiseaseModel> disease;
-  final PlaceDetailsModel? placeDetailsModel;
+  final DiseaseModel? diseaseModel;
   final bool isLoading;
   final PagingBody? body;
   final bool isPaging;
@@ -12,7 +12,7 @@ class DiseaseState {
 
   DiseaseState({
     this.disease = const [],
-    this.placeDetailsModel,
+    this.diseaseModel,
     this.isLoading = false,
     this.body,
     this.isPaging = false,
@@ -23,7 +23,7 @@ class DiseaseState {
 
   DiseaseState copyWith({
     List<DiseaseModel>? disease,
-    PlaceDetailsModel? placeDetailsModel,
+    DiseaseModel? diseaseModel,
     bool? isLoading,
     PagingBody? body,
     bool? isPaging,
@@ -33,7 +33,7 @@ class DiseaseState {
   }) =>
       DiseaseState(
         disease: disease ?? this.disease,
-        placeDetailsModel: placeDetailsModel ?? this.placeDetailsModel,
+        diseaseModel: diseaseModel ?? this.diseaseModel,
         isLoading: isLoading ?? false,
         body: body ?? this.body,
         isPaging: isPaging ?? false,

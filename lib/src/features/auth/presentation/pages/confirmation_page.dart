@@ -7,6 +7,7 @@ import 'package:baliqchi/src/core/router/app_routes.dart';
 import 'package:baliqchi/src/features/auth/data/bodies/send_sms_body.dart';
 import 'package:baliqchi/src/features/auth/presentation/manager/auth_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -22,7 +23,11 @@ class _ConfirmationPageState extends State<ConfirmationPage> {
   late final bloc = context.read<AuthBloc>();
 
   final form = FormGroup({
-    'phone': FormControl<String>(validators: [Validators.required]),
+    'phone': FormControl<String>(validators: [
+      Validators.maxLength(9),
+      Validators.minLength(9),
+      Validators.number()
+    ]),
   });
 
   FormControl<String> get phone => form.control('phone') as FormControl<String>;
@@ -37,8 +42,9 @@ class _ConfirmationPageState extends State<ConfirmationPage> {
         backgroundColor: AppColors.mainColor1,
         body: BlocConsumer<AuthBloc, AuthState>(
           listener: (context, state) {
-            if(state.isSendSmsVerified){
-              context.pushNamed(AppRoutes.checkSms.name,pathParameters: {'phone':phone.value??''});
+            if (state.isSendSmsVerified) {
+              context.pushNamed(AppRoutes.checkSms.name,
+                  pathParameters: {'phone': phone.value ?? ''});
             }
           },
           builder: (context, state) {
@@ -73,20 +79,13 @@ class _ConfirmationPageState extends State<ConfirmationPage> {
                             S.of(context).royxatdanOtish,
                             style: CustomTextStyle.h22SB),
                         const SizedBox(height: 24),
-                        Text(
-                          textAlign: TextAlign.center,
-                          S.of(context).telefonRaqam,
-                          style: CustomTextStyle.h14SB,
-                        ),
-                        const SizedBox(height: 4),
                         ReactiveTextField(
-                          formControl:phone,
+                          formControl: phone,
                           decoration: InputDecoration(
                             errorStyle: const TextStyle(height: 0),
                             errorText: null,
                             prefixText: "+998 ",
-                            prefixStyle: const TextStyle(fontSize: 16),
-                            hintStyle: const TextStyle(color: Colors.grey),
+                            labelText: S.of(context).telefonRaqam,
                             counterText: '',
                             border: appTextFiledBorder(),
                             enabledBorder: appTextFiledBorder(),
@@ -99,15 +98,19 @@ class _ConfirmationPageState extends State<ConfirmationPage> {
                           validationMessages: {
                             'required': (error) => '',
                           },
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly,
+                            LengthLimitingTextInputFormatter(12),
+                          ],
                         ),
                         const SizedBox(height: 24),
-                        ReactiveFormConsumer(builder: (context,form,child){
+                        ReactiveFormConsumer(builder: (context, form, child) {
                           return AppElevatedButton(
                               text: S.of(context).davomEtish,
                               onClick: () {
-                                if(form.valid){
+                                if (form.valid) {
                                   bloc.sendSms(SendSmsBody(phoneNumber: "998${phone.value}"));
-                                }else{
+                                } else {
                                   form.markAllAsTouched();
                                 }
                               });

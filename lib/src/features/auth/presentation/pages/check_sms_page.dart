@@ -1,11 +1,9 @@
 import 'package:baliqchi/generated/l10n.dart';
 import 'package:baliqchi/src/config/components/app_elevated_button.dart';
-import 'package:baliqchi/src/config/components/text_field_components.dart';
 import 'package:baliqchi/src/config/theme/app_colors.dart';
 import 'package:baliqchi/src/config/theme/text_styles.dart';
 import 'package:baliqchi/src/core/router/app_routes.dart';
 import 'package:baliqchi/src/features/auth/data/bodies/login_body.dart';
-import 'package:baliqchi/src/features/auth/data/bodies/send_sms_body.dart';
 import 'package:baliqchi/src/features/auth/presentation/manager/auth_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -36,42 +34,6 @@ class _CheckSmsPageState extends State<CheckSmsPage> {
 
   @override
   Widget build(BuildContext context) {
-    final defaultPinTheme = PinTheme(
-      width: 35,
-      height: 35,
-      textStyle: const TextStyle(color: AppColors.textColorDark, fontSize: 16),
-      decoration: BoxDecoration(
-          color: AppColors.mainColorDark,
-          borderRadius: BorderRadius.circular(8)),
-    );
-
-    final cursor = Column(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        Container(
-          width: 56,
-          height: 3,
-          decoration: BoxDecoration(
-            color: AppColors.bottomNavActiveIconColor,
-            borderRadius: BorderRadius.circular(8),
-          ),
-        ),
-      ],
-    );
-    final preFilledWidget = Column(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        Container(
-          width: 56,
-          height: 3,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(8),
-          ),
-        ),
-      ],
-    );
-
     return Scaffold(
         appBar: AppBar(
           backgroundColor: AppColors.mainColor1,

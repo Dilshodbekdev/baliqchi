@@ -25,8 +25,7 @@ class AppCubit extends Cubit<AppState> {
   init() async {
     var isDark = await Prefs.getBool(AppConstants.kDark) ?? false;
     var lang = await Prefs.getString(AppConstants.kLanguage) ?? 'uz';
-    var localization =
-        Localization.all.firstWhere((element) => element.languageCode == lang);
+    var localization = Localization.all.firstWhere((element) => element.languageCode == lang);
     emit(state.copyWith(locale: localization, isDark: isDark, lang: lang));
   }
 }

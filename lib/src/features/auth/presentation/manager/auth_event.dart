@@ -25,3 +25,7 @@ class CheckSmsEvent extends AuthEvent {
 
   CheckSmsEvent({required this.body});
 }
+
+class DeleteAccountEvent extends AuthEvent {
+  DeleteAccountEvent();
+}

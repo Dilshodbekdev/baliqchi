@@ -2,12 +2,11 @@ import 'dart:convert';
 
 import 'package:baliqchi/generated/l10n.dart';
 import 'package:baliqchi/src/config/components/app_container.dart';
-import 'package:baliqchi/src/config/components/app_row.dart';
 import 'package:baliqchi/src/config/theme/app_colors.dart';
 import 'package:baliqchi/src/config/theme/text_styles.dart';
+import 'package:baliqchi/src/core/app_state/cubit/app_cubit.dart';
 import 'package:baliqchi/src/core/router/app_routes.dart';
 import 'package:baliqchi/src/core/util/app_constants.dart';
-import 'package:baliqchi/src/features/home/data/models/places_model.dart';
 import 'package:baliqchi/src/features/home/data/models/technology_model.dart';
 import 'package:baliqchi/src/features/home/presentation/manager/home_bloc.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -40,9 +39,15 @@ class _TechnologyDetailsPageState extends State<TechnologyDetailsPage> {
 
   @override
   Widget build(BuildContext context) {
+    return BlocBuilder<AppCubit, AppState>(
+  builder: (context, appState) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(model?.nameUz??'--'),
+        title: Text(
+          appState.lang=='uz'?
+            model?.nameUz??'--':
+              model?.nameRu??'--'
+        ),
       ),
       body: BlocBuilder<HomeBloc, HomeState>(
         builder: (context, state) {
@@ -86,7 +91,10 @@ class _TechnologyDetailsPageState extends State<TechnologyDetailsPage> {
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: Text(model?.nameUz ?? '--',
+                    child: Text(
+                      appState.lang=='uz'?
+                      model?.nameUz??'--':
+                      model?.nameRu??'--',
                         style: const TextStyle(
                           fontSize: 19,
                           fontWeight: FontWeight.w600,
@@ -95,7 +103,9 @@ class _TechnologyDetailsPageState extends State<TechnologyDetailsPage> {
                   Padding(
                     padding:
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    child: Text(model?.contentUz ?? '--',
+                    child: Text(appState.lang=='uz'?
+                    model?.contentUz??'--':
+                    model?.contentRu??'--',
                         style: const TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.w400,
@@ -119,7 +129,7 @@ class _TechnologyDetailsPageState extends State<TechnologyDetailsPage> {
                         padding: const EdgeInsets.symmetric(horizontal: 8),
                         itemCount: state.technologies?.length,
                         itemBuilder: (context, index) {
-                          return buildTechnologyItem(context, state.technologies?[index], index);
+                          return buildTechnologyItem(context, state.technologies?[index], index,appState.lang);
                         }),
                   ),
                   const SizedBox(height: 16,)
@@ -129,10 +139,12 @@ class _TechnologyDetailsPageState extends State<TechnologyDetailsPage> {
         },
       ),
     );
+  },
+);
   }
 
   Widget buildTechnologyItem(
-      BuildContext context, TechnologyModel? model, int index) {
+      BuildContext context, TechnologyModel? model, int index,String lang) {
     return AppContainer(
       padding: const EdgeInsets.all(8),
       onTab: () {
@@ -153,7 +165,9 @@ class _TechnologyDetailsPageState extends State<TechnologyDetailsPage> {
           const SizedBox(
             height: 8,
           ),
-          Text(model?.nameUz ?? '--',style: CustomTextStyle.h16M,)
+          Text(lang=='uz'?
+          model?.nameUz??'--':
+          model?.nameRu??'--',style: CustomTextStyle.h16M,)
         ],
       ),
     );

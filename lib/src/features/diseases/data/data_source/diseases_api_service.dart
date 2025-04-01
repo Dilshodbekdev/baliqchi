@@ -10,6 +10,7 @@ abstract class DiseasesApiService {
 
   /// URLS
   static const String _diseases = 'api/v1/diseases/all';
+  static const String _disease = 'api/v1/diseases/{id}';
 
   /// REQUESTS
   @GET(_diseases)
@@ -17,5 +18,10 @@ abstract class DiseasesApiService {
     @Query('page') int page,
     @Query('size') int size,
     @Query('search') String? search,
+  );
+
+  @GET(_disease)
+  Future<HttpResponse<DiseaseModel>> disease(
+    @Path('id') String id,
   );
 }

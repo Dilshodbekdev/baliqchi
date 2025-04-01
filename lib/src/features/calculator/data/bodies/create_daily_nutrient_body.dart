@@ -9,28 +9,31 @@
 
 class CreateDailyNutrientBody {
   CreateDailyNutrientBody({
-      this.fishName, 
-      this.fishTypeId, 
-      this.countFish, 
-      this.weightFish, 
-      this.percentage, 
-      this.temperature, 
-      this.foodName, 
-      this.foodTypeId,});
+    this.fishName,
+    this.fishTypeId,
+    this.countFish,
+    this.fcr,
+    this.weightFish,
+    this.percentage,
+    this.temperature,
+    this.foodName,
+    this.foodTypeId,
+  });
 
   CreateDailyNutrientBody.fromJson(dynamic json) {
     fishName = json['fishName'];
-    fishTypeId = json['fishTypeId'];
     countFish = json['countFish'];
+    countFish = json['fcr'];
     weightFish = json['weightFish'];
     percentage = json['percentage'];
     temperature = json['temperature'];
     foodName = json['foodName'];
-    foodTypeId = json['foodTypeId'];
   }
+
   String? fishName;
   String? fishTypeId;
   int? countFish;
+  double? fcr;
   int? weightFish;
   int? percentage;
   String? temperature;
@@ -40,14 +43,12 @@ class CreateDailyNutrientBody {
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
     map['fishName'] = fishName;
-    map['fishTypeId'] = fishTypeId;
     map['countFish'] = countFish;
     map['weightFish'] = weightFish;
     map['percentage'] = percentage;
     map['temperature'] = temperature;
     map['foodName'] = foodName;
-    map['foodTypeId'] = foodTypeId;
+    map['fcr'] = fcr;
     return map;
   }
-
 }

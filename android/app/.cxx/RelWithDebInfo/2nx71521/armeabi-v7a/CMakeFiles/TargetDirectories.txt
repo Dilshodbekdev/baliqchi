@@ -1,0 +1,2 @@
+/Users/technocorp/AndroidStudioProjects/baliqchi/android/app/.cxx/RelWithDebInfo/2nx71521/armeabi-v7a/CMakeFiles/rebuild_cache.dir
+/Users/technocorp/AndroidStudioProjects/baliqchi/android/app/.cxx/RelWithDebInfo/2nx71521/armeabi-v7a/CMakeFiles/edit_cache.dir

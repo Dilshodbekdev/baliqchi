@@ -42,7 +42,8 @@ class LogService {
         'REQUEST: ${response.requestOptions.method} ${response.realUri};\n'
         'PARAM: ${response.requestOptions.data}\n'
         'RESPONSE: ${response.statusCode} ${response.statusMessage}\n'
-        'DATA = ${response.data}',
+        'DATA = ${response.data}\n'
+        'Cookie = ${response.headers['Set-Cookie']}',
       );
     }
   }

@@ -1,4 +1,3 @@
-
 import 'package:baliqchi/generated/l10n.dart';
 import 'package:baliqchi/src/config/components/app_container.dart';
 import 'package:baliqchi/src/config/components/app_elevated_button.dart';
@@ -26,15 +25,11 @@ class EconomicPage extends StatefulWidget {
 
 class _EconomicPageState extends State<EconomicPage> {
   late final bloc = context.read<EconomicBloc>();
-  String? role;
 
   @override
   void initState() {
     super.initState();
     bloc.economics();
-    Prefs.getString(AppConstants.kRole).then((onValue) {
-      role = onValue;
-    });
   }
 
   @override
@@ -44,89 +39,72 @@ class _EconomicPageState extends State<EconomicPage> {
         return BlocBuilder<EconomicBloc, EconomicState>(
           builder: (context, state) {
             return Scaffold(
-              bottomNavigationBar: role!='USER'? Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: AppElevatedButton(
-                        text: S.of(context).tahminiyIqtisodiyKorsatkichlar,
-                        onClick: () {
-                          context.pushNamed(AppRoutes.createEconomic.name);
-                        },
-                      ),
-                    ),
-                    const SizedBox(width: 16,),
-                    Expanded(
-                      child: AppElevatedButton(
-                        text: S.of(context).oylikHarajatlarniKorish,
-                        onClick: () {
-                          context.pushNamed(AppRoutes.expenseMonth.name);
-                        },
-                        textColor: AppColors.textColorLight,
-                        bgColor: Colors.white,
-                      ),
-                    ),
-                  ],
-                ),
-              ):null,
-              body: role!='USER'? state.isLoading
-                  ? const Center(
-                  child: CircularProgressIndicator(
-                    color: AppColors.mainColor2,
-                  ))
-                  : state.expensesMonth.isEmpty
-                  ? const Center(
-                child: Text(
-                  'Ma\'lumot topilmadi',
-                  style: TextStyle(
-                    color: Color(0xFF0F1728),
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              )
-                  : LazyLoadScrollView(
-                isLoading: state.isPaging,
-                scrollOffset: 300,
-                onEndOfPage: () => bloc.pagingEconomics(),
-                child: ListView.builder(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  itemCount: state.economics.length +
-                      (state.isPaging ? 1 : 0),
-                  itemBuilder: (context, index) => index ==
-                      state.economics.length
-                      ? const Center(child: CircularProgressIndicator())
-                      : buildNewsItem(
-                      context, state.economics[index], index),
-                ),
-              )
-                  : Center(
-                child: AppContainer(
-                  padding: const EdgeInsets.all(16),
-                  margin: const EdgeInsets.all(16),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
+                bottomNavigationBar: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Row(
                     children: [
-                      Text(S.of(context).sizObunaBolmagansiz,style: CustomTextStyle.h16SB,),
-                      const SizedBox(height: 16,),
-                      Text(S.of(context).loremIpsumDolorSitAmetConsecteturAdipiscingElitSedDo,style: CustomTextStyle.h14R,),
-                      const SizedBox(height: 16,),
-                      AppElevatedButton(text: S.of(context).obunaBolish, onClick: (){
-                        context.pushNamed(AppRoutes.definitions.name);
-                      })
+                      Expanded(
+                        child: AppElevatedButton(
+                          text: S.of(context).tahminiyIqtisodiyKorsatkichlar,
+                          onClick: () {
+                            context.pushNamed(AppRoutes.createEconomic.name);
+                          },
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: AppElevatedButton(
+                          text: S.of(context).oylikHarajatlarniKorish,
+                          onClick: () {
+                            context.pushNamed(AppRoutes.expenseMonth.name);
+                          },
+                          textColor: AppColors.textColorLight,
+                          bgColor: Colors.white,
+                        ),
+                      ),
                     ],
                   ),
                 ),
-              ),
-            );
+                body: state.isLoading
+                    ? const Center(
+                        child: CircularProgressIndicator(
+                        color: AppColors.mainColor2,
+                      ))
+                    : state.economics.isEmpty
+                        ? Center(
+                            child: Text(
+                              S.of(context).malumotTopilmadi,
+                              style: const TextStyle(
+                                color: Color(0xFF0F1728),
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          )
+                        : LazyLoadScrollView(
+                            isLoading: state.isPaging,
+                            scrollOffset: 300,
+                            onEndOfPage: () => bloc.pagingEconomics(),
+                            child: ListView.builder(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 16),
+                              itemCount: state.economics.length +
+                                  (state.isPaging ? 1 : 0),
+                              itemBuilder: (context, index) => index ==
+                                      state.economics.length
+                                  ? const Center(
+                                      child: CircularProgressIndicator())
+                                  : buildNewsItem(
+                                      context, state.economics[index], index,appState.lang),
+                            ),
+                          ));
           },
         );
       },
     );
   }
 
-  Widget buildNewsItem(BuildContext context, EconomicModel? model, int index) {
+  Widget buildNewsItem(BuildContext context, EconomicModel? model, int index,String lang) {
     return AppContainer(
       padding: const EdgeInsets.all(8),
       onTab: () {
@@ -136,21 +114,27 @@ class _EconomicPageState extends State<EconomicPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("Hisobot(${model?.date})"),
+          AppRow(
+              text1: S.of(context).sana,
+              text2: model?.date??'-'
+          ),
           AppRow(
               text1: S.of(context).baliqTuri,
-              text2: model?.fishTypeNames?.nameUz ?? '--'),
+              text2: lang=='uz'?
+              model?.fishTypeNames?.nameUz ?? '-':
+              model?.fishTypeNames?.nameRu??'-'
+          ),
           AppRow(
               text1: S.of(context).soni,
-              text2: "${model?.amountFish} so'm"),
+              text2: model?.amountFish.toString() ?? '--'),
           AppRow(
               text1: S.of(context).boqishUsuli,
-              text2: model?.technologyNames?.nameUz ?? '--'),
+              text2: lang=='uz'?
+              model?.technologyNames?.nameUz ?? '-':
+              model?.technologyNames?.nameRu??'-'
+          ),
         ],
       ),
-    ).animate().move().fade().slideY(
-        begin: 1,
-        end: 0,
-        duration: 200.ms);
+    ).animate().move().fade().slideY(begin: 1, end: 0, duration: 200.ms);
   }
 }

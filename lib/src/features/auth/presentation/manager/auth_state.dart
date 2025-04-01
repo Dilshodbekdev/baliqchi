@@ -9,6 +9,7 @@ class AuthState {
   final bool isRegisterVerified;
   final bool isSendSmsVerified;
   final bool isCheckSmsVerified;
+  final bool isDeleteAccount;
   final bool isLoading;
   final bool hasError;
   final String errorMessage;
@@ -22,6 +23,7 @@ class AuthState {
     this.isRegisterVerified = false,
     this.isSendSmsVerified = false,
     this.isCheckSmsVerified = false,
+    this.isDeleteAccount = false,
     this.isLoading = false,
     this.hasError = false,
     this.errorMessage = 'Some Error',
@@ -37,6 +39,7 @@ class AuthState {
     bool? isRegisterVerified,
     bool? isSendSmsVerified,
     bool? isCheckSmsVerified,
+    bool? isDeleteAccount,
     bool? hasError,
     String? errorMessage,
   }) =>
@@ -49,6 +52,7 @@ class AuthState {
         isRegisterVerified: isRegisterVerified ?? false,
         isSendSmsVerified: isSendSmsVerified ?? false,
         isCheckSmsVerified: isCheckSmsVerified ?? false,
+        isDeleteAccount: isDeleteAccount ?? false,
         isLoading: isLoading ?? false,
         hasError: hasError ?? false,
         errorMessage: errorMessage ?? this.errorMessage,

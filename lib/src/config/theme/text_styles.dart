@@ -127,6 +127,6 @@ class CustomTextStyle {
   static TextStyle hint = const TextStyle(
     fontSize: 16,
     fontWeight: FontWeight.w500,
-    color: AppColors.secondaryTextColor
+    color: AppColors.secondaryTextColor,
   );
 }

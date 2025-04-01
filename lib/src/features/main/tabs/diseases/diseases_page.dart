@@ -3,13 +3,10 @@ import 'dart:io';
 
 import 'package:baliqchi/generated/l10n.dart';
 import 'package:baliqchi/src/config/components/app_container.dart';
-import 'package:baliqchi/src/config/components/app_elevated_button.dart';
 import 'package:baliqchi/src/config/components/text_field_components.dart';
 import 'package:baliqchi/src/config/theme/app_colors.dart';
-import 'package:baliqchi/src/config/theme/text_styles.dart';
 import 'package:baliqchi/src/core/app_state/cubit/app_cubit.dart';
 import 'package:baliqchi/src/core/router/app_routes.dart';
-import 'package:baliqchi/src/core/services/services.dart';
 import 'package:baliqchi/src/core/util/app_constants.dart';
 import 'package:baliqchi/src/features/diseases/data/models/diseases_model.dart';
 import 'package:baliqchi/src/features/diseases/presentation/manager/disease_bloc.dart';
@@ -33,15 +30,11 @@ class DiseasesPage extends StatefulWidget {
 
 class _DiseasesPageState extends State<DiseasesPage> {
   late final bloc = context.read<DiseaseBloc>();
-  String? role;
 
   @override
   void initState() {
     super.initState();
     bloc.diseases('');
-    Prefs.getString(AppConstants.kRole).then((onValue) {
-      role = onValue;
-    });
   }
 
   @override
@@ -51,77 +44,62 @@ class _DiseasesPageState extends State<DiseasesPage> {
         return BlocBuilder<DiseaseBloc, DiseaseState>(
           builder: (context, state) {
             return Scaffold(
-              body: role!='USER'? SingleChildScrollView(
-                child: Column(
-                  children: [
-                    AppContainer(
-                      margin: const EdgeInsets.all(16),
-                      padding: EdgeInsets.zero,
-                      child: TextField(
-                        onChanged: (val) {
-                          bloc.diseases(val);
-                        },
-                        decoration: InputDecoration(
-                          fillColor: Colors.white,
-                          filled: true,
-                          isDense: true,
-                          hintText: S.of(context).qidirish,
-                          prefixIcon: const Icon(Icons.search),
-                          border: appTextFiledTransparentBorder(),
-                          enabledBorder: appTextFiledTransparentBorder(),
-                          disabledBorder: appTextFiledTransparentBorder(),
-                          focusedBorder: appTextFiledTransparentBorder(),
-                          errorBorder: appTextFiledTransparentBorder(),
-                        ),
-                      ),
-                    ),
-                    LazyLoadScrollView(
-                      isLoading: state.isPaging,
-                      scrollOffset: 300,
-                      onEndOfPage: () => bloc.pagingDiseases(''),
-                      child: ListView.builder(
-                        shrinkWrap: true,
-                        padding: const EdgeInsets.symmetric(horizontal: 8),
-                        itemCount:
-                            state.disease.length + (state.isPaging ? 1 : 0),
-                        itemBuilder: (context, index) => index ==
-                                state.disease.length
-                            ? const Center(child: CircularProgressIndicator())
-                            : buildNewsItem(context, state.disease[index], index),
-                      ),
-                    ),
-                  ],
-                ),
-              ): Center(
-                child: AppContainer(
-                  padding: const EdgeInsets.all(16),
+                body: Column(
+              children: [
+                AppContainer(
                   margin: const EdgeInsets.all(16),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(S.of(context).sizObunaBolmagansiz,style: CustomTextStyle.h16SB,),
-                      const SizedBox(height: 16,),
-                      Text(S.of(context).loremIpsumDolorSitAmetConsecteturAdipiscingElitSedDo,style: CustomTextStyle.h14R,),
-                      const SizedBox(height: 16,),
-                      AppElevatedButton(text: S.of(context).obunaBolish, onClick: (){
-                        context.pushNamed(AppRoutes.definitions.name);
-                      })
-                    ],
+                  padding: EdgeInsets.zero,
+                  child: TextField(
+                    onChanged: (val) {
+                      bloc.diseases(val);
+                    },
+                    decoration: InputDecoration(
+                      fillColor: Colors.white,
+                      filled: true,
+                      isDense: true,
+                      hintText: S.of(context).qidirish,
+                      prefixIcon: const Icon(Icons.search),
+                      border: appTextFiledTransparentBorder(),
+                      enabledBorder: appTextFiledTransparentBorder(),
+                      disabledBorder: appTextFiledTransparentBorder(),
+                      focusedBorder: appTextFiledTransparentBorder(),
+                      errorBorder: appTextFiledTransparentBorder(),
+                    ),
                   ),
                 ),
-              ),
-            );
+                Expanded(
+                  child: LazyLoadScrollView(
+                    isLoading: state.isPaging,
+                    scrollOffset: 300,
+                    onEndOfPage: () => bloc.pagingDiseases(''),
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      itemCount:
+                          state.disease.length + (state.isPaging ? 1 : 0),
+                      itemBuilder: (context, index) =>
+                          index == state.disease.length
+                              ? const Center(child: CircularProgressIndicator())
+                              : buildNewsItem(context, state.disease[index],
+                                  index, appState.lang),
+                    ),
+                  ),
+                ),
+              ],
+            ));
           },
         );
       },
     );
   }
 
-  Widget buildNewsItem(BuildContext context, DiseaseModel? model, int index) {
+  Widget buildNewsItem(
+      BuildContext context, DiseaseModel? model, int index, String lang) {
     return AppContainer(
       padding: const EdgeInsets.all(8),
       onTab: () {
-        context.pushNamed(AppRoutes.diseaseDetails.name,pathParameters: {'id':jsonEncode(model)});
+        context.pushNamed(AppRoutes.diseaseDetails.name,
+            pathParameters: {'id':model?.id??''});
       },
       child: Row(
         children: [
@@ -131,22 +109,32 @@ class _DiseasesPageState extends State<DiseasesPage> {
               height: 100,
               width: 100,
               imageUrl: "${AppConstants.baseUrl}${model?.files?.first.path}",
+              progressIndicatorBuilder: (context, url, downloadProgress) =>
+                  Center(
+                      child: CircularProgressIndicator(
+                        value: downloadProgress.progress,
+                        color: AppColors.mainColor2,
+                      )),
+              errorWidget: (context, url, error) => const Center(
+                  child: Icon(
+                    Icons.error,
+                    color: AppColors.mainRedColor,
+                  )),
               fit: BoxFit.fill,
             ),
           ),
-          const SizedBox(width: 8,),
+          const SizedBox(
+            width: 8,
+          ),
           Expanded(
             child: Text(
-              model?.nameUz ?? '--',
+              lang == 'uz' ? model?.nameUz ?? '--' : model?.nameRu ?? '--',
               style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
             ),
           ),
         ],
       ),
-    ).animate().move().fade().slideY(
-        begin: 1,
-        end: 0,
-        duration: 100.ms);
+    ).animate().move().fade().slideY(begin: 1, end: 0, duration: 100.ms);
   }
 
   Future<String> fetchImageUrl(String url) async {
@@ -171,7 +159,8 @@ class _DiseasesPageState extends State<DiseasesPage> {
 
     if (response.statusCode == 200) {
       // Parse the response to get the image URL
-      final imageUrl = response.data['imageUrl']; // Adjust this according to your API response
+      final imageUrl = response
+          .data['imageUrl']; // Adjust this according to your API response
       return imageUrl;
     } else {
       throw Exception('Failed to load image');

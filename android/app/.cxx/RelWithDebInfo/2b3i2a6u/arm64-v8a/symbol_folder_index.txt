@@ -1,0 +1,1 @@
+/Users/technocorp/AndroidStudioProjects/baliqchi/build/app/intermediates/cxx/RelWithDebInfo/2b3i2a6u/obj/arm64-v8a

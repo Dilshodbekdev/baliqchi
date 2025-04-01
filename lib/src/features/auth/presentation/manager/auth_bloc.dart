@@ -8,6 +8,7 @@ import 'package:baliqchi/src/features/auth/data/bodies/register_body.dart';
 import 'package:baliqchi/src/features/auth/data/bodies/send_sms_body.dart';
 import 'package:baliqchi/src/features/auth/data/models/login_model.dart';
 import 'package:baliqchi/src/features/auth/domain/use_case/check_sms_use_case.dart';
+import 'package:baliqchi/src/features/auth/domain/use_case/delete_account_use_case.dart';
 import 'package:baliqchi/src/features/auth/domain/use_case/login_use_case.dart';
 import 'package:baliqchi/src/features/auth/domain/use_case/register_use_case.dart';
 import 'package:baliqchi/src/features/auth/domain/use_case/send_sms_use_case.dart';
@@ -22,12 +23,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final RegisterUseCase _registerUseCase;
   final SendSmsUseCase _sendSmsUseCase;
   final CheckSmsUseCase _checkSmsUseCase;
+  final DeleteAccountUseCase _deleteAccountUseCase;
 
   AuthBloc(
     this._loginUseCase,
     this._sendSmsUseCase,
     this._checkSmsUseCase,
     this._registerUseCase,
+    this._deleteAccountUseCase,
   ) : super(AuthState()) {
     on<LoginEvent>((event, emit) async {
       await emit.onEach(_onLogin(event), onData: emit.call);
@@ -44,10 +47,18 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<CheckSmsEvent>((event, emit) async {
       await emit.onEach(_onCheckSms(event), onData: emit.call);
     });
+
+    on<DeleteAccountEvent>((event, emit) async {
+      await emit.onEach(_onDeleteAccount(event), onData: emit.call);
+    });
   }
 
   login(LoginBody body) {
     add(LoginEvent(body: body));
+  }
+
+  deleteAccount() {
+    add(DeleteAccountEvent());
   }
 
   register(RegisterBody body) {
@@ -72,7 +83,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       Prefs.setString(AppConstants.kUserId, dataState.data?.id ?? '');
       Prefs.setString(AppConstants.kRole, dataState.data?.role ?? '');
       Prefs.setString(AppConstants.kFullName, "${dataState.data?.firstName} ${dataState.data?.lastName}");
-      Prefs.setString(AppConstants.kPhoneNumber, dataState.data?.username??'');
+      Prefs.setString(AppConstants.kPhoneNumber, dataState.data?.username ?? '');
     } else if (dataState is DataFailed) {
       yield state.copyWith(hasError: true, errorMessage: dataState.message);
     }
@@ -84,11 +95,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     final dataState = await _registerUseCase.call(params: event.body);
 
     if (dataState is DataSuccess) {
-      yield state.copyWith(registerModel: dataState.data, isRegisterVerified: true);
+      yield state.copyWith(
+          registerModel: dataState.data, isRegisterVerified: true);
       Prefs.setString(AppConstants.kUserId, dataState.data?.id ?? '');
       Prefs.setString(AppConstants.kRole, dataState.data?.role ?? '');
       Prefs.setString(AppConstants.kFullName, "${dataState.data?.firstName} ${dataState.data?.lastName}");
-      Prefs.setString(AppConstants.kPhoneNumber, dataState.data?.username??'');
+      Prefs.setString(AppConstants.kPhoneNumber, dataState.data?.username ?? '');
     } else if (dataState is DataFailed) {
       yield state.copyWith(hasError: true, errorMessage: dataState.message);
     }
@@ -115,6 +127,18 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     if (dataState is DataSuccess) {
       yield state.copyWith(
           checkSmsModel: dataState.data, isCheckSmsVerified: true);
+    } else if (dataState is DataFailed) {
+      yield state.copyWith(hasError: true, errorMessage: dataState.message);
+    }
+  }
+
+  Stream<AuthState> _onDeleteAccount(DeleteAccountEvent event) async* {
+    yield state.copyWith(isLoading: true);
+
+    final dataState = await _deleteAccountUseCase.call(params: 1);
+
+    if (dataState is DataSuccess) {
+      yield state.copyWith(isDeleteAccount: true);
     } else if (dataState is DataFailed) {
       yield state.copyWith(hasError: true, errorMessage: dataState.message);
     }

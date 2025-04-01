@@ -18,4 +18,8 @@ class DiseasesRepositoryImpl with BaseRepository implements DiseaseRepository {
         body.pageSize ?? 10,
         body.search,
       ));
+
+  @override
+  Future<DataState<DiseaseModel>> disease(String id) async =>
+      await handleResponse(response: _apiService.disease(id));
 }

@@ -1,0 +1,2 @@
+/Users/technocorp/AndroidStudioProjects/baliqchi/android/app/.cxx/RelWithDebInfo/2b3i2a6u/arm64-v8a/CMakeFiles/edit_cache.dir
+/Users/technocorp/AndroidStudioProjects/baliqchi/android/app/.cxx/RelWithDebInfo/2b3i2a6u/arm64-v8a/CMakeFiles/rebuild_cache.dir

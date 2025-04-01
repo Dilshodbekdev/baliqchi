@@ -18,17 +18,20 @@ class S {
   static S? _current;
 
   static S get current {
-    assert(_current != null,
-        'No instance of S was loaded. Try to initialize the S delegate before accessing S.current.');
+    assert(
+      _current != null,
+      'No instance of S was loaded. Try to initialize the S delegate before accessing S.current.',
+    );
     return _current!;
   }
 
   static const AppLocalizationDelegate delegate = AppLocalizationDelegate();
 
   static Future<S> load(Locale locale) {
-    final name = (locale.countryCode?.isEmpty ?? false)
-        ? locale.languageCode
-        : locale.toString();
+    final name =
+        (locale.countryCode?.isEmpty ?? false)
+            ? locale.languageCode
+            : locale.toString();
     final localeName = Intl.canonicalizedLocale(name);
     return initializeMessages(localeName).then((_) {
       Intl.defaultLocale = localeName;
@@ -41,8 +44,10 @@ class S {
 
   static S of(BuildContext context) {
     final instance = S.maybeOf(context);
-    assert(instance != null,
-        'No instance of S present in the widget tree. Did you add S.delegate in localizationsDelegates?');
+    assert(
+      instance != null,
+      'No instance of S present in the widget tree. Did you add S.delegate in localizationsDelegates?',
+    );
     return instance!;
   }
 
@@ -62,22 +67,12 @@ class S {
 
   /// `Yoki`
   String get yoki {
-    return Intl.message(
-      'Yoki',
-      name: 'yoki',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Yoki', name: 'yoki', desc: '', args: []);
   }
 
   /// `Davom etish`
   String get davomEtish {
-    return Intl.message(
-      'Davom etish',
-      name: 'davomEtish',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Davom etish', name: 'davomEtish', desc: '', args: []);
   }
 
   /// `Roʻyxatdan oʻtish`
@@ -102,12 +97,7 @@ class S {
 
   /// `Parol`
   String get parol {
-    return Intl.message(
-      'Parol',
-      name: 'parol',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Parol', name: 'parol', desc: '', args: []);
   }
 
   /// `Telefon raqam`
@@ -162,32 +152,17 @@ class S {
 
   /// `Kirish`
   String get kirish {
-    return Intl.message(
-      'Kirish',
-      name: 'kirish',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Kirish', name: 'kirish', desc: '', args: []);
   }
 
   /// `Ismi`
   String get ismi {
-    return Intl.message(
-      'Ismi',
-      name: 'ismi',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Ismi', name: 'ismi', desc: '', args: []);
   }
 
   /// `Familiya`
   String get familiya {
-    return Intl.message(
-      'Familiya',
-      name: 'familiya',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Familiya', name: 'familiya', desc: '', args: []);
   }
 
   /// `Parolni tasdiqlang`
@@ -252,32 +227,17 @@ class S {
 
   /// `Mavsum:`
   String get mavsum {
-    return Intl.message(
-      'Mavsum:',
-      name: 'mavsum',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Mavsum:', name: 'mavsum', desc: '', args: []);
   }
 
   /// `Kirsh:`
   String get kirsh {
-    return Intl.message(
-      'Kirsh:',
-      name: 'kirsh',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Kirsh:', name: 'kirsh', desc: '', args: []);
   }
 
   /// `Manzil:`
   String get manzil {
-    return Intl.message(
-      'Manzil:',
-      name: 'manzil',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Manzil:', name: 'manzil', desc: '', args: []);
   }
 
   /// `Oxshash maskanlar`
@@ -302,12 +262,7 @@ class S {
 
   /// `Qidirish...`
   String get qidirish {
-    return Intl.message(
-      'Qidirish...',
-      name: 'qidirish',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Qidirish...', name: 'qidirish', desc: '', args: []);
   }
 
   /// `Tahminiy iqtisodiy ko’rsatkichlar`
@@ -322,12 +277,7 @@ class S {
 
   /// `Baliq turi`
   String get baliqTuri {
-    return Intl.message(
-      'Baliq turi',
-      name: 'baliqTuri',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Baliq turi', name: 'baliqTuri', desc: '', args: []);
   }
 
   /// `Havza gektari`
@@ -372,12 +322,7 @@ class S {
 
   /// `Baliq soni`
   String get baliqSoni {
-    return Intl.message(
-      'Baliq soni',
-      name: 'baliqSoni',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Baliq soni', name: 'baliqSoni', desc: '', args: []);
   }
 
   /// `Mavsum boshidagi baliq og'irligi, g`
@@ -412,12 +357,7 @@ class S {
 
   /// `Ovqat turi`
   String get ovqatTuri {
-    return Intl.message(
-      'Ovqat turi',
-      name: 'ovqatTuri',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Ovqat turi', name: 'ovqatTuri', desc: '', args: []);
   }
 
   /// `Ovqat narxi 1kg, (so’m)`
@@ -522,12 +462,7 @@ class S {
 
   /// `Soni`
   String get soni {
-    return Intl.message(
-      'Soni',
-      name: 'soni',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Soni', name: 'soni', desc: '', args: []);
   }
 
   /// `Tashalayotgan baliqlar narxi`
@@ -602,22 +537,12 @@ class S {
 
   /// `Daromad`
   String get daromad {
-    return Intl.message(
-      'Daromad',
-      name: 'daromad',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Daromad', name: 'daromad', desc: '', args: []);
   }
 
   /// `Foyda`
   String get foyda {
-    return Intl.message(
-      'Foyda',
-      name: 'foyda',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Foyda', name: 'foyda', desc: '', args: []);
   }
 
   /// `1 kg baliqning tan narxi`
@@ -632,12 +557,7 @@ class S {
 
   /// `Baliq narxi`
   String get baliqNarxi {
-    return Intl.message(
-      'Baliq narxi',
-      name: 'baliqNarxi',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Baliq narxi', name: 'baliqNarxi', desc: '', args: []);
   }
 
   /// `Tilni o’zgartirish`
@@ -662,12 +582,7 @@ class S {
 
   /// `Ta'riflar`
   String get tariflar {
-    return Intl.message(
-      'Ta\'riflar',
-      name: 'tariflar',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Ta\'riflar', name: 'tariflar', desc: '', args: []);
   }
 
   /// `Oylik harajatlarni ko’rish`
@@ -742,12 +657,7 @@ class S {
 
   /// `Oy`
   String get oy {
-    return Intl.message(
-      'Oy',
-      name: 'oy',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Oy', name: 'oy', desc: '', args: []);
   }
 
   /// `Harajat miqdori, so’m`
@@ -772,22 +682,12 @@ class S {
 
   /// `Qo’shish`
   String get qoshish {
-    return Intl.message(
-      'Qo’shish',
-      name: 'qoshish',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Qo’shish', name: 'qoshish', desc: '', args: []);
   }
 
   /// `Hisoblash`
   String get hisoblash {
-    return Intl.message(
-      'Hisoblash',
-      name: 'hisoblash',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Hisoblash', name: 'hisoblash', desc: '', args: []);
   }
 
   /// `Umumiy ma’lumotlarni kiritish`
@@ -812,12 +712,7 @@ class S {
 
   /// `Tarif turi`
   String get tarifTuri {
-    return Intl.message(
-      'Tarif turi',
-      name: 'tarifTuri',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Tarif turi', name: 'tarifTuri', desc: '', args: []);
   }
 
   /// `To’lov summasi`
@@ -905,6 +800,519 @@ class S {
     return Intl.message(
       'Kunlik ovqat miqdori, %',
       name: 'kunlikOvqatMiqdori',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Omillari`
+  String get omillari {
+    return Intl.message('Omillari', name: 'omillari', desc: '', args: []);
+  }
+
+  /// `Sindromlari`
+  String get sindromlari {
+    return Intl.message('Sindromlari', name: 'sindromlari', desc: '', args: []);
+  }
+
+  /// `Davolash usuli`
+  String get davolashUsuli {
+    return Intl.message(
+      'Davolash usuli',
+      name: 'davolashUsuli',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Filter`
+  String get filter {
+    return Intl.message('Filter', name: 'filter', desc: '', args: []);
+  }
+
+  /// `Qabul qilish`
+  String get qabulQilish {
+    return Intl.message(
+      'Qabul qilish',
+      name: 'qabulQilish',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Dan`
+  String get dan {
+    return Intl.message('Dan', name: 'dan', desc: '', args: []);
+  }
+
+  /// `Gacha`
+  String get gacha {
+    return Intl.message('Gacha', name: 'gacha', desc: '', args: []);
+  }
+
+  /// `Havza ma’lumotlarini kiritish`
+  String get havzaMalumotlariniKiritish {
+    return Intl.message(
+      'Havza ma’lumotlarini kiritish',
+      name: 'havzaMalumotlariniKiritish',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Havza nomi`
+  String get havzaNomi {
+    return Intl.message('Havza nomi', name: 'havzaNomi', desc: '', args: []);
+  }
+
+  /// `Saqlash`
+  String get saqlash {
+    return Intl.message('Saqlash', name: 'saqlash', desc: '', args: []);
+  }
+
+  /// `Umumiy ma’lumotlar`
+  String get umumiyMalumotlar {
+    return Intl.message(
+      'Umumiy ma’lumotlar',
+      name: 'umumiyMalumotlar',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Ozuqa haqida ma'lumotlar`
+  String get ozuqaHaqidaMalumotlar {
+    return Intl.message(
+      'Ozuqa haqida ma\'lumotlar',
+      name: 'ozuqaHaqidaMalumotlar',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Suv hajmi, m³`
+  String get suvHajmiM {
+    return Intl.message('Suv hajmi, m³', name: 'suvHajmiM', desc: '', args: []);
+  }
+
+  /// `Baliqlarning zichligi, kg/m3`
+  String get baliqlarningZichligiKgm3 {
+    return Intl.message(
+      'Baliqlarning zichligi, kg/m3',
+      name: 'baliqlarningZichligiKgm3',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Yashab qoladigan baliqlar soni`
+  String get yashabQoladiganBaliqlarSoni {
+    return Intl.message(
+      'Yashab qoladigan baliqlar soni',
+      name: 'yashabQoladiganBaliqlarSoni',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Umumiy ozuqani hisoblash`
+  String get umumiyOzuqaniHisoblash {
+    return Intl.message(
+      'Umumiy ozuqani hisoblash',
+      name: 'umumiyOzuqaniHisoblash',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Ozuqa turi`
+  String get ozuqaTuri {
+    return Intl.message('Ozuqa turi', name: 'ozuqaTuri', desc: '', args: []);
+  }
+
+  /// `Ozuqa narxi, so’m`
+  String get ozuqaNarxiSom {
+    return Intl.message(
+      'Ozuqa narxi, so’m',
+      name: 'ozuqaNarxiSom',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Baliq vaznining o‘sish oralig‘i`
+  String get baliqVazniningOsishOraligi {
+    return Intl.message(
+      'Baliq vaznining o‘sish oralig‘i',
+      name: 'baliqVazniningOsishOraligi',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `O‘sish muddati`
+  String get osishMuddati {
+    return Intl.message(
+      'O‘sish muddati',
+      name: 'osishMuddati',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Talab qilingan ozuqa, kg`
+  String get talabQilinganOvqatKg {
+    return Intl.message(
+      'Talab qilingan ozuqa, kg',
+      name: 'talabQilinganOvqatKg',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Tavsiya etilgan suv harorati (°C)`
+  String get tavsiyaEtilganSuvHaroratiC {
+    return Intl.message(
+      'Tavsiya etilgan suv harorati (°C)',
+      name: 'tavsiyaEtilganSuvHaroratiC',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Ozuqalanish darajasi (kg/100kg baliq/kun)`
+  String get ozuqalanishDarajasiKg100kgBaliqkun {
+    return Intl.message(
+      'Ozuqalanish darajasi (kg/100kg baliq/kun)',
+      name: 'ozuqalanishDarajasiKg100kgBaliqkun',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Taxminiy o'sishi (%/kun)`
+  String get taxminiyOsishiKun {
+    return Intl.message(
+      'Taxminiy o\'sishi (%/kun)',
+      name: 'taxminiyOsishiKun',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Taxmin qilingan kunlar`
+  String get taxminQilinganKunlar {
+    return Intl.message(
+      'Taxmin qilingan kunlar',
+      name: 'taxminQilinganKunlar',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Talab qilingan ozuqa/kun, kg`
+  String get talabQilinganOzuqakunKg {
+    return Intl.message(
+      'Talab qilingan ozuqa/kun, kg',
+      name: 'talabQilinganOzuqakunKg',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Tanlash`
+  String get tanlash {
+    return Intl.message('Tanlash', name: 'tanlash', desc: '', args: []);
+  }
+
+  /// `Karta raqami`
+  String get kartaRaqami {
+    return Intl.message(
+      'Karta raqami',
+      name: 'kartaRaqami',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Shaxsiy karta ma'lumotlari`
+  String get shaxsiyKartaMalumotlari {
+    return Intl.message(
+      'Shaxsiy karta ma`lumotlari',
+      name: 'shaxsiyKartaMalumotlari',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Muddati`
+  String get muddati {
+    return Intl.message('Muddati', name: 'muddati', desc: '', args: []);
+  }
+
+  /// `Chiqish`
+  String get chiqish {
+    return Intl.message('Chiqish', name: 'chiqish', desc: '', args: []);
+  }
+
+  /// `Boqilayotgan baliqlar`
+  String get boqilayotganBaliqlar {
+    return Intl.message(
+      'Boqilayotgan baliqlar',
+      name: 'boqilayotganBaliqlar',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Kasallik turlari`
+  String get kasallikTurlari {
+    return Intl.message(
+      'Kasallik turlari',
+      name: 'kasallikTurlari',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Iqtisodiy ko’rsatkichlar`
+  String get iqtisodiyKorsatkichlar {
+    return Intl.message(
+      'Iqtisodiy ko’rsatkichlar',
+      name: 'iqtisodiyKorsatkichlar',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Boshlang'ich og'irligi, g`
+  String get boshlangichOgirligiKg {
+    return Intl.message(
+      'Boshlang\'ich og\'irligi, g',
+      name: 'boshlangichOgirligiKg',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Yakuniy og'irligi, g`
+  String get yakuniyOgirligiKg {
+    return Intl.message(
+      'Yakuniy og\'irligi, g',
+      name: 'yakuniyOgirligiKg',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Batafsil`
+  String get batafsil {
+    return Intl.message('Batafsil', name: 'batafsil', desc: '', args: []);
+  }
+
+  /// `Hisobni o'chirish`
+  String get deleteAccount {
+    return Intl.message(
+      'Hisobni o\'chirish',
+      name: 'deleteAccount',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Foydalanuvchini tizimdan oʼchirish`
+  String get hisobniOchirish {
+    return Intl.message(
+      'Foydalanuvchini tizimdan oʼchirish',
+      name: 'hisobniOchirish',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Foydalanuvchi tizimdan oʼchirilgandan soʼng, uning shaxsiy maʼlumotlari va murojaatlar bilan bogʼliq barcha  maʼlumotlar tizimidan oʼchiriladi. Aloqa nazorati mobilь ilovasi qayta yuklangandan soʼng  foydalanuvchining avvalgi shaxsiy ma'lumotlari va murojaatlar bilan bog'liq ma'lumotlar qayta tiklanmaydi.`
+  String
+  get foydalanuvchiTizimdanOchirilgandanSongUningShaxsiyMalumotlariVaMurojaatlarBilan {
+    return Intl.message(
+      'Foydalanuvchi tizimdan oʼchirilgandan soʼng, uning shaxsiy maʼlumotlari va murojaatlar bilan bogʼliq barcha  maʼlumotlar tizimidan oʼchiriladi. Aloqa nazorati mobilь ilovasi qayta yuklangandan soʼng  foydalanuvchining avvalgi shaxsiy ma\'lumotlari va murojaatlar bilan bog\'liq ma\'lumotlar qayta tiklanmaydi.',
+      name:
+          'foydalanuvchiTizimdanOchirilgandanSongUningShaxsiyMalumotlariVaMurojaatlarBilan',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Mobilь telefon bilan bogʼliq sabablar (telefonning yoʼqolishi, boshqa odamga berib yuborish, raqamning oʼzgarishi va b.);`
+  String
+  get mobilTelefonBilanBogliqSabablarTelefonningYoqolishiBoshqaOdamgaBerib {
+    return Intl.message(
+      'Mobilь telefon bilan bogʼliq sabablar (telefonning yoʼqolishi, boshqa odamga berib yuborish, raqamning oʼzgarishi va b.);',
+      name:
+          'mobilTelefonBilanBogliqSabablarTelefonningYoqolishiBoshqaOdamgaBerib',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Ilova bilan bogʼliq sabablar (ilovaning koʼrishi tushunarsiz, ilovadan foydalanish qiyin va b.);`
+  String
+  get ilovaBilanBogliqSabablarIlovaningKorishiTushunarsizIlovadanFoydalanishQiyin {
+    return Intl.message(
+      'Ilova bilan bogʼliq sabablar (ilovaning koʼrishi tushunarsiz, ilovadan foydalanish qiyin va b.);',
+      name:
+          'ilovaBilanBogliqSabablarIlovaningKorishiTushunarsizIlovadanFoydalanishQiyin',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Boshqa masalalar.`
+  String get boshqaMasalalar {
+    return Intl.message(
+      'Boshqa masalalar.',
+      name: 'boshqaMasalalar',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Qo'shimcha izoh qoldirish`
+  String get qoshimchaIzohQoldirish {
+    return Intl.message(
+      'Qo\'shimcha izoh qoldirish',
+      name: 'qoshimchaIzohQoldirish',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Foydalanuvchini tizimdan oʼchirish foydalanuvchining qaroriga qarab amalga oshiriladi. Hurmatli foydalanuvchi, Aloqa nazorati mobil ilovasini oʼchirishdan avval oʼchirish sabablarini koʼrsating:`
+  String
+  get foydalanuvchiniTizimdanOchirishFoydalanuvchiningQarorigaQarabAmalgaOshiriladiHurmatliFoydalanuvchi {
+    return Intl.message(
+      'Foydalanuvchini tizimdan oʼchirish foydalanuvchining qaroriga qarab amalga oshiriladi. Hurmatli foydalanuvchi, Aloqa nazorati mobil ilovasini oʼchirishdan avval oʼchirish sabablarini koʼrsating:',
+      name:
+          'foydalanuvchiniTizimdanOchirishFoydalanuvchiningQarorigaQarabAmalgaOshiriladiHurmatliFoydalanuvchi',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Посмотреть на карте`
+  String get seeMap {
+    return Intl.message(
+      'Посмотреть на карте',
+      name: 'seeMap',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Havzalar`
+  String get havzalar {
+    return Intl.message('Havzalar', name: 'havzalar', desc: '', args: []);
+  }
+
+  /// `Sana`
+  String get sana {
+    return Intl.message('Sana', name: 'sana', desc: '', args: []);
+  }
+
+  /// `Sotilgan`
+  String get sotilgan {
+    return Intl.message('Sotilgan', name: 'sotilgan', desc: '', args: []);
+  }
+
+  /// `O'lgan`
+  String get olgan {
+    return Intl.message('O\'lgan', name: 'olgan', desc: '', args: []);
+  }
+
+  /// `Izoh`
+  String get izoh {
+    return Intl.message('Izoh', name: 'izoh', desc: '', args: []);
+  }
+
+  /// `Baliqlarning kamayishi`
+  String get baliqlarningKamayishi {
+    return Intl.message(
+      'Baliqlarning kamayishi',
+      name: 'baliqlarningKamayishi',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Kamayish turi`
+  String get kamayishTuri {
+    return Intl.message(
+      'Kamayish turi',
+      name: 'kamayishTuri',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Baliqlarning kamayishini kiritish`
+  String get baliqlarningKamayishiniKiritish {
+    return Intl.message(
+      'Baliqlarning kamayishini kiritish',
+      name: 'baliqlarningKamayishiniKiritish',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Yilni tanlang`
+  String get yilniTanlang {
+    return Intl.message(
+      'Yilni tanlang',
+      name: 'yilniTanlang',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Yopish`
+  String get yopish {
+    return Intl.message('Yopish', name: 'yopish', desc: '', args: []);
+  }
+
+  /// `FCR ko'rsatkishi`
+  String get fcrKorsatkishi {
+    return Intl.message(
+      'FCR ko\'rsatkishi',
+      name: 'fcrKorsatkishi',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Havza tarixi`
+  String get havzaTarixi {
+    return Intl.message(
+      'Havza tarixi',
+      name: 'havzaTarixi',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Oldingmi baliqlar soni`
+  String get oldingmiBaliqlarSoni {
+    return Intl.message(
+      'Oldingmi baliqlar soni',
+      name: 'oldingmiBaliqlarSoni',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Hozirgi baliqlar soni`
+  String get hozirgiBaliqlarSoni {
+    return Intl.message(
+      'Hozirgi baliqlar soni',
+      name: 'hozirgiBaliqlarSoni',
       desc: '',
       args: [],
     );

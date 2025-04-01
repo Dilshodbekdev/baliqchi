@@ -1,9 +1,13 @@
 import 'package:baliqchi/src/core/resources/base_repository.dart';
 import 'package:baliqchi/src/core/resources/data_state.dart';
+import 'package:baliqchi/src/features/auth/data/models/login_model.dart';
 import 'package:baliqchi/src/features/home/data/bodies/paging_body.dart';
+import 'package:baliqchi/src/features/home/data/bodies/pay_me_card_body.dart';
+import 'package:baliqchi/src/features/home/data/bodies/pay_me_code_body.dart';
 import 'package:baliqchi/src/features/home/data/data_source/home_api_service.dart';
 import 'package:baliqchi/src/features/home/data/models/billing_model.dart';
 import 'package:baliqchi/src/features/home/data/models/definition_model.dart';
+import 'package:baliqchi/src/features/home/data/models/pay_me_card_model.dart';
 import 'package:baliqchi/src/features/home/data/models/place_details_model.dart';
 import 'package:baliqchi/src/features/home/data/models/places_model.dart';
 import 'package:baliqchi/src/features/home/data/models/region_model.dart';
@@ -44,4 +48,16 @@ class HomeRepositoryImpl with BaseRepository implements HomeRepository {
   @override
   Future<DataState<List<BillingModel>>> billings() async =>
       await handleResponse(response: _apiService.billings());
+
+  @override
+  Future<DataState<PayMeCardModel>> payMeCard(PayMeCardBody body) async =>
+      await handleResponse(response: _apiService.payMeCard(body));
+
+  @override
+  Future<DataState<LoginModel>> payMeCode(PayMeCodeBody body) async =>
+      await handleResponse(response: _apiService.payMeCode(body));
+
+  @override
+  Future<DataState<LoginModel>> me() async =>
+      await handleResponse(response: _apiService.me());
 }

@@ -1,87 +1,191 @@
 part of 'calculator_bloc.dart';
 
 class CalculatorState {
-  final List<EconomicModel> economics;
-  final List<ExpenseMonthModel> expensesMonth;
-  final DetailsEconomicModel? detailsEconomicModel;
+  final List<GeneralCalculation> generalCalculations;
+  final List<FishDecline> fishDeclines;
+  final List<FishDeclineHistory> fishDeclinesHistory;
+  final List<GeneralCalculation>? generalCalculationList;
+  final FishDeclineStatisticModel? fishDeclineStatistics;
+  final List<FoodModel>? generalNutritionalInfosFoods;
+  final List<GeneralNutritionalInfoModel>? generalNutritionalInfos;
+  final PontDetailsModel? pontDetailsModel;
+  final GeneralCalculationDetailsModel? generalCalculationDetailsModel;
+  final FishDeclineDetailsModel? fishDeclineDetailsModel;
+  final GeneralCalculationDetailsModel? generalCalculationListDetailsModel;
+  final DefaultModel? updateGeneralCalculationModel;
+  final DefaultModel? deleteGeneralCalculationModel;
+  final DefaultModel? deleteFishDeclineModel;
   final List<FishTypes>? fishTypes;
   final List<FishTypes>? foodTypes;
+  final List<PondModel>? ponds;
+  final List<PondFishModel>? pondFishes;
   final List<NutritionalInfoModel>? nutritionalInfos;
   final CreateDailyNutrientModel? createDailyNutrientModel;
-  final DefaultModel? createExpenseMonth;
+  final DefaultModel? createPond;
+  final DefaultModel? createFishDecline;
+  final DefaultModel? createGeneralCalculation;
   final List<TechnologyModel>? technologies;
   final bool isLoading;
-  final bool isCreated;
+  final bool isCreatedDailyNutrient;
+  final bool isCreatedPond;
+  final bool isPondFishes;
+  final bool isCreatedFishDecline;
+  final bool isCreatedGeneralCalculation;
+  final bool isUpdated;
+  final bool isDetails;
+  final bool isDeleted;
   final PagingBody? body;
-  final PagingBody? body1;
+  final FishDeclineStatisticBody? statisticBody;
+  final PagingBody? bodyFishDecline;
+  final PagingBody? bodyFishDeclineHistory;
   final bool isPaging;
-  final bool isPaging1;
+  final bool isPagingFishDecline;
+  final bool isPagingFishDeclineHistory;
   final bool reachedMax;
-  final bool reachedMax1;
+  final bool reachedMaxFishDecline;
+  final bool reachedMaxFishDeclineHistory;
   final bool hasError;
   final String errorMessage;
 
   CalculatorState({
-    this.economics = const [],
-    this.expensesMonth = const [],
-    this.detailsEconomicModel,
+    this.generalCalculations = const [],
+    this.fishDeclines = const [],
+    this.fishDeclinesHistory = const [],
+    this.generalCalculationList,
+    this.fishDeclineStatistics,
+    this.generalNutritionalInfosFoods,
+    this.generalNutritionalInfos,
+    this.pontDetailsModel,
+    this.generalCalculationDetailsModel,
+    this.fishDeclineDetailsModel,
+    this.generalCalculationListDetailsModel,
+    this.updateGeneralCalculationModel,
+    this.deleteGeneralCalculationModel,
+    this.deleteFishDeclineModel,
     this.fishTypes,
     this.foodTypes,
+    this.ponds,
+    this.pondFishes,
     this.nutritionalInfos,
     this.createDailyNutrientModel,
-    this.createExpenseMonth,
+    this.createPond,
+    this.createFishDecline,
+    this.createGeneralCalculation,
     this.technologies,
     this.isLoading = false,
-    this.isCreated = false,
+    this.isCreatedDailyNutrient = false,
+    this.isCreatedPond = false,
+    this.isPondFishes = false,
+    this.isCreatedFishDecline = false,
+    this.isCreatedGeneralCalculation = false,
+    this.isUpdated = false,
+    this.isDeleted = false,
+    this.isDetails = false,
     this.body,
-    this.body1,
+    this.statisticBody,
+    this.bodyFishDecline,
+    this.bodyFishDeclineHistory,
     this.isPaging = false,
-    this.isPaging1 = false,
+    this.isPagingFishDecline = false,
+    this.isPagingFishDeclineHistory = false,
     this.reachedMax = false,
-    this.reachedMax1 = false,
+    this.reachedMaxFishDecline = false,
+    this.reachedMaxFishDeclineHistory = false,
     this.hasError = false,
     this.errorMessage = 'Some Error',
   });
 
   CalculatorState copyWith({
-    List<EconomicModel>? economics,
-    List<ExpenseMonthModel>? expensesMonth,
-    DetailsEconomicModel? detailsEconomicModel,
+    List<GeneralCalculation>? generalCalculations,
+    List<FishDecline>? fishDeclines,
+    List<FishDeclineHistory>? fishDeclinesHistory,
+    List<GeneralCalculation>? generalCalculationList,
+    FishDeclineStatisticModel? fishDeclineStatistics,
+    List<FoodModel>? generalNutritionalInfosFoods,
+    List<GeneralNutritionalInfoModel>? generalNutritionalInfos,
+    PontDetailsModel? pontDetailsModel,
+    GeneralCalculationDetailsModel? generalCalculationDetailsModel,
+    FishDeclineDetailsModel? fishDeclineDetailsModel,
+    GeneralCalculationDetailsModel? generalCalculationListDetailsModel,
+    DefaultModel? updateGeneralCalculationModel,
+    DefaultModel? deleteGeneralCalculationModel,
+    DefaultModel? deleteFishDeclineModel,
     List<FishTypes>? fishTypes,
     List<FishTypes>? foodTypes,
+    List<PondModel>? ponds,
+    List<PondFishModel>? pondFishes,
     List<NutritionalInfoModel>? nutritionalInfos,
     CreateDailyNutrientModel? createDailyNutrientModel,
-    DefaultModel? createExpenseMonth,
+    DefaultModel? createPond,
+    DefaultModel? createFishDecline,
+    DefaultModel? createGeneralCalculation,
     List<TechnologyModel>? technologies,
     bool? isLoading,
-    bool? isCreated,
+    bool? isCreatedDailyNutrient,
+    bool? isCreatedPond,
+    bool? isPondFishes,
+    bool? isCreatedFishDecline,
+    bool? isCreatedGeneralCalculation,
+    bool? isUpdated,
+    bool? isDeleted,
+    bool? isDetails,
     PagingBody? body,
-    PagingBody? body1,
+    FishDeclineStatisticBody? statisticBody,
+    PagingBody? bodyFishDecline,
+    PagingBody? bodyFishDeclineHistory,
     bool? isPaging,
-    bool? isPaging1,
+    bool? isPagingFishDecline,
+    bool? isPagingFishDeclineHistory,
     bool? reachedMax,
-    bool? reachedMax1,
+    bool? reachedMaxFishDecline,
+    bool? reachedMaxFishDeclineHistory,
     bool? hasError,
     String? errorMessage,
   }) =>
       CalculatorState(
-        economics: economics ?? this.economics,
-        expensesMonth: expensesMonth ?? this.expensesMonth,
-        detailsEconomicModel: detailsEconomicModel ?? this.detailsEconomicModel,
+        generalCalculations: generalCalculations ?? this.generalCalculations,
+        fishDeclines: fishDeclines ?? this.fishDeclines,
+        fishDeclinesHistory: fishDeclinesHistory ?? this.fishDeclinesHistory,
+        generalCalculationList: generalCalculationList ?? this.generalCalculationList,
+        fishDeclineStatistics: fishDeclineStatistics ?? this.fishDeclineStatistics,
+        generalNutritionalInfosFoods: generalNutritionalInfosFoods ?? this.generalNutritionalInfosFoods,
+        generalNutritionalInfos: generalNutritionalInfos,
+        pontDetailsModel: pontDetailsModel??this.pontDetailsModel,
+        generalCalculationDetailsModel: generalCalculationDetailsModel??this.generalCalculationDetailsModel,
+        fishDeclineDetailsModel: fishDeclineDetailsModel,
+        generalCalculationListDetailsModel: generalCalculationListDetailsModel,
+        updateGeneralCalculationModel: updateGeneralCalculationModel,
+        deleteGeneralCalculationModel: deleteGeneralCalculationModel,
+        deleteFishDeclineModel: deleteFishDeclineModel,
         fishTypes: fishTypes ?? this.fishTypes,
         foodTypes: foodTypes ?? this.foodTypes,
+        ponds: ponds ?? this.ponds,
+        pondFishes: pondFishes ?? this.pondFishes,
         nutritionalInfos: nutritionalInfos ?? this.nutritionalInfos,
-        createDailyNutrientModel: createDailyNutrientModel ?? this.createDailyNutrientModel,
-        createExpenseMonth: createExpenseMonth ?? this.createExpenseMonth,
+        createDailyNutrientModel: createDailyNutrientModel,
+        createPond: createPond,
+        createFishDecline: createFishDecline,
+        createGeneralCalculation: createGeneralCalculation ,
         technologies: technologies ?? this.technologies,
         isLoading: isLoading ?? false,
-        isCreated: isCreated ?? false,
+        isCreatedDailyNutrient: isCreatedDailyNutrient ?? false,
+        isCreatedPond: isCreatedPond ?? false,
+        isPondFishes: isPondFishes ?? false,
+        isCreatedFishDecline: isCreatedFishDecline ?? false,
+        isCreatedGeneralCalculation: isCreatedGeneralCalculation ?? false,
+        isUpdated: isUpdated ?? false,
+        isDeleted: isDeleted ?? false,
+        isDetails: isDetails ?? false,
         body: body ?? this.body,
-        body1: body1 ?? this.body1,
+        statisticBody: statisticBody ?? this.statisticBody,
+        bodyFishDecline: bodyFishDecline ?? this.bodyFishDecline,
+        bodyFishDeclineHistory: bodyFishDeclineHistory ?? this.bodyFishDeclineHistory,
         isPaging: isPaging ?? false,
-        isPaging1: isPaging1 ?? false,
+        isPagingFishDecline: isPagingFishDecline ?? false,
+        isPagingFishDeclineHistory: isPagingFishDeclineHistory ?? false,
         reachedMax: reachedMax ?? this.reachedMax,
-        reachedMax1: reachedMax1 ?? this.reachedMax1,
+        reachedMaxFishDecline: reachedMaxFishDecline ?? this.reachedMaxFishDecline,
+        reachedMaxFishDeclineHistory: reachedMaxFishDeclineHistory ?? this.reachedMaxFishDeclineHistory,
         hasError: hasError ?? false,
         errorMessage: errorMessage ?? this.errorMessage,
       );

@@ -12,4 +12,6 @@ abstract class AuthRepository {
   Future<DataState<LoginModel>> sendSms(SendSmsBody body);
 
   Future<DataState<LoginModel>> checkSms(LoginBody body);
+
+  Future<DataState<dynamic>> deleteAccount();
 }

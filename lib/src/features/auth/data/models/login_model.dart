@@ -6,11 +6,12 @@
 
 class LoginModel {
   LoginModel({
-      this.id, 
-      this.role, 
-      this.username, 
-      this.firstName, 
-      this.lastName,});
+    this.id,
+    this.role,
+    this.username,
+    this.firstName,
+    this.lastName,
+  });
 
   LoginModel.fromJson(dynamic json) {
     id = json['id'];
@@ -19,6 +20,7 @@ class LoginModel {
     firstName = json['firstName'];
     lastName = json['lastName'];
   }
+
   String? id;
   String? role;
   String? username;
@@ -34,5 +36,4 @@ class LoginModel {
     map['lastName'] = lastName;
     return map;
   }
-
 }

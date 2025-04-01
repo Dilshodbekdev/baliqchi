@@ -16,6 +16,7 @@ abstract class AuthApiService {
   static const String _register = 'api/v1/users/client';
   static const String _sendSms = 'api/v1/sms';
   static const String _checkSms = 'api/v1/sms/check';
+  static const String _deleteAccount = 'api/v1/users/profile';
 
   /// REQUESTS
   @POST(_login)
@@ -26,6 +27,9 @@ abstract class AuthApiService {
 
   @POST(_sendSms)
   Future<HttpResponse<LoginModel>> sendSms(@Body() SendSmsBody body);
+
+  @DELETE(_deleteAccount)
+  Future<HttpResponse<dynamic>> deleteAccount();
 
   @GET(_checkSms)
   Future<HttpResponse<LoginModel>> checkSms(

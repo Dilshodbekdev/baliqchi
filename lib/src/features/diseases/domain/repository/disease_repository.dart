@@ -4,4 +4,6 @@ import 'package:baliqchi/src/features/home/data/bodies/paging_body.dart';
 
 abstract class DiseaseRepository {
   Future<DataState<DiseasesModel>> diseases(PagingBody body);
+
+  Future<DataState<DiseaseModel>> disease(String id);
 }

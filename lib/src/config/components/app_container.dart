@@ -18,11 +18,11 @@ class AppContainer extends StatelessWidget {
           margin: margin??const EdgeInsets.all(8),
           padding: padding ?? const EdgeInsets.all(12),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8.0),
+            borderRadius: BorderRadius.circular(12),
             color: Colors.white,
             boxShadow: [
               BoxShadow(
-                color: Colors.grey.withOpacity(0.3),
+                color: Colors.grey.withOpacity(0.1),
                 offset: const Offset(0.0, 1.0), //(x,y)
                 blurRadius: 6.0,
               ),

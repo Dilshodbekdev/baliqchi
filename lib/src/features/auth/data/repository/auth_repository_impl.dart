@@ -31,4 +31,8 @@ class AuthRepositoryImpl with BaseRepository implements AuthRepository {
         body.password ?? '',
         body.phone ?? '',
       ));
+
+  @override
+  Future<DataState> deleteAccount() async =>
+      await handleResponse(response: _apiService.deleteAccount());
 }

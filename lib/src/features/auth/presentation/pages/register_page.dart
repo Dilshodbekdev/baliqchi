@@ -6,6 +6,7 @@ import 'package:baliqchi/src/config/theme/text_styles.dart';
 import 'package:baliqchi/src/core/router/app_routes.dart';
 import 'package:baliqchi/src/features/auth/data/bodies/register_body.dart';
 import 'package:baliqchi/src/features/auth/presentation/manager/auth_bloc.dart';
+import 'package:baliqchi/src/features/main/manger/main_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:reactive_forms/reactive_forms.dart';
@@ -48,6 +49,7 @@ class _RegisterPageState extends State<RegisterPage> {
         body: BlocConsumer<AuthBloc, AuthState>(
   listener: (context, state) {
     if(state.isRegisterVerified){
+      context.read<MainCubit>().change("${state.registerModel?.firstName} ${state.registerModel?.lastName}", state.registerModel?.username??'');
       context.goNamed(AppRoutes.main.name);
     }
   },

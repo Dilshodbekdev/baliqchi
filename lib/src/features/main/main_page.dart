@@ -6,17 +6,18 @@ import 'package:baliqchi/src/config/theme/text_styles.dart';
 import 'package:baliqchi/src/core/app_state/cubit/app_cubit.dart';
 import 'package:baliqchi/src/core/app_state/localization.dart';
 import 'package:baliqchi/src/core/router/app_routes.dart';
-import 'package:baliqchi/src/core/services/services.dart';
-import 'package:baliqchi/src/core/util/app_constants.dart';
+import 'package:baliqchi/src/features/main/manger/main_cubit.dart';
 import 'package:baliqchi/src/features/main/tabs/calculator/calculator_page.dart';
 import 'package:baliqchi/src/features/main/tabs/diseases/diseases_page.dart';
 import 'package:baliqchi/src/features/main/tabs/economic/economic_page.dart';
 import 'package:baliqchi/src/features/main/tabs/home/home_page.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -30,57 +31,50 @@ class _MainPageState extends State<MainPage> {
     const HomePage(),
     const CalculatorPage(),
     const DiseasesPage(),
-    const DiseasesPage(),
     const EconomicPage()
   ];
 
-  List titles = [
-    "Assalomu aleykum",
-    "Boqilayotgan baliqlar",
-    "",
-    "Kasallik turlari",
-    "Iqtisodiy ko’rsatkichlar",
-  ];
-  var index = 0;
-  String? _fullName;
-  String? _phone;
+  String getTitle(int index){
+    List<String> titles=[
+      "Baliqchiga Ko'makchi",
+      S.of(context).boqilayotganBaliqlar,
+      S.of(context).kasallikTurlari,
+      S.of(context).iqtisodiyKorsatkichlar,
+    ];
+    return titles[index];
+  }
 
   late final cubit = context.read<AppCubit>();
 
-  @override
-  void initState() {
-    super.initState();
-    Prefs.getString(AppConstants.kFullName).then((onValue){
-      setState(() {
-        _fullName=onValue;
-      });
-    });
-    Prefs.getString(AppConstants.kPhoneNumber).then((onValue){
-      setState(() {
-        _phone=onValue;
-      });
-    });
+  Future<void> _makePhoneCall(String phoneNumber) async {
+    final Uri launchUri = Uri(
+      scheme: 'tel',
+      path: phoneNumber,
+    );
+    await launchUrl(launchUri);
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AppCubit, AppState>(
   builder: (context, state) {
+    return BlocBuilder<MainCubit, MainState>(
+  builder: (context, stateMain) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(titles[index]),
+        title: Text(getTitle(stateMain.selectedIndex)),
       ),
       drawer: Drawer(
         child: ListView(
           // Important: Remove any padding from the ListView.
           padding: EdgeInsets.zero,
           children: [
-           _fullName!=null?
+           stateMain.name!=null?
            UserAccountsDrawerHeader(
-              accountName: Text(_fullName??'--'),
-              accountEmail: Text(_phone??'--'),
+              accountName: Text(stateMain.name??'--'),
+              accountEmail: Text(stateMain.name??'--'),
               currentAccountPicture: CircleAvatar(
-                child: Text(_fullName?[0].toUpperCase()??'',style: CustomTextStyle.h22SB,),
+                child: Text(stateMain.name?[0].toUpperCase()??'',style: CustomTextStyle.h22SB,),
               ),
               onDetailsPressed: (){
 
@@ -93,7 +87,7 @@ class _MainPageState extends State<MainPage> {
                 }),
               ],
             )),
-            ListTile(
+            /*ListTile(
               dense: true,
               leading: SvgPicture.asset('assets/icons/ic_card.svg'),
               title: Text(
@@ -114,7 +108,7 @@ class _MainPageState extends State<MainPage> {
               onTap: () {
                 context.pushNamed(AppRoutes.definitions.name);
               },
-            ),
+            ),*/
             ExpansionTile(
               dense: true,
               leading: SvgPicture.asset(
@@ -159,14 +153,10 @@ class _MainPageState extends State<MainPage> {
                   padding: EdgeInsets.symmetric(horizontal: 16),
                   child: AppDivider(),
                 ),
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16),
-                  child: AppDivider(),
-                ),
                 ListTile(
                   dense: true,
                   onTap: () {
-                    //cubit.changeLocale(Localization.ru, 'ru');
+                    cubit.changeLocale(Localization.ru, 'ru');
                   },
                   leading: ClipRRect(
                       borderRadius: BorderRadius.circular(15),
@@ -183,18 +173,18 @@ class _MainPageState extends State<MainPage> {
                           borderRadius: BorderRadius.circular(4)),
                       value: state.lang=='ru',
                       onChanged: (v){
-                        //cubit.changeLocale(Localization.ru, 'ru');
+                        cubit.changeLocale(Localization.ru, 'ru');
                       }),
-                )
+                ).animate().move().fade().slideY(duration: 250.ms)
               ],
             ),
             const AppDivider(),
             ListTile(
               dense: true,
               leading: SvgPicture.asset('assets/icons/ic_logout.svg'),
-              title: const Text(
-                'Chiqish',
-                style: TextStyle(
+              title: Text(
+                S.of(context).chiqish,
+                style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
                   color: Colors.red
@@ -205,17 +195,57 @@ class _MainPageState extends State<MainPage> {
                 context.goNamed(AppRoutes.login.name);
               },
             ),
+            ListTile(
+              dense: true,
+              leading: const Icon(CupertinoIcons.delete,color: AppColors.mainRedColor,),
+              title: Text(
+                  S.of(context).deleteAccount,
+                  style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.red
+                  )
+              ),
+              onTap: () {
+                //_showMyDialog();
+                context.pushNamed(AppRoutes.deleteAccount.name);
+              },
+            ),
           ],
         ),
       ),
-      body: pages[index],
+      body: switch(stateMain.selectedIndex){
+        0 || 2 => pages[stateMain.selectedIndex],
+        1 || 3 => stateMain.name==null?Center(
+          child: Padding(
+            padding: const EdgeInsets.all(32.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                    S.of(context).loremIpsumDolorSitAmetConsecteturAdipiscingElitSedDo,
+                  style: CustomTextStyle.h16SB,
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 32.0),
+                AppElevatedButton(
+                    text: S.of(context).tizimgaKirish,
+                    onClick: () {
+                      context.pushNamed(AppRoutes.login.name);
+                    },
+                    bgColor: AppColors.mainColor2,
+                    textColor: Colors.white)
+              ],
+            ),
+          ),
+        ):pages[stateMain.selectedIndex],
+        _ => const Center(child: Text('Error'))
+    },
       bottomNavigationBar: BottomNavigationBar(
           onTap: (value) {
-            setState(() {
-              index = value;
-            });
+            context.read<MainCubit>().selectTab(value);
           },
-          currentIndex: index,
+          currentIndex: stateMain.selectedIndex,
           type: BottomNavigationBarType.fixed,
           iconSize: 24,
           showSelectedLabels: false,
@@ -239,18 +269,6 @@ class _MainPageState extends State<MainPage> {
                 ),
                 label: ""),
             BottomNavigationBarItem(
-              icon: Align(
-                alignment: Alignment.bottomCenter,
-                child: Container(
-                  decoration: const BoxDecoration(
-                      color: AppColors.mainColor2, shape: BoxShape.circle),
-                  padding: const EdgeInsets.all(14),
-                  child: SvgPicture.asset('assets/icons/ic_scan.svg'),
-                ),
-              ),
-              label: '',
-            ),
-            BottomNavigationBarItem(
                 icon: SvgPicture.asset('assets/icons/ic_diseases.svg'),
                 activeIcon: SvgPicture.asset(
                   'assets/icons/ic_diseases.svg',
@@ -266,6 +284,8 @@ class _MainPageState extends State<MainPage> {
                 label: ""),
           ]),
     );
+  },
+);
   },
 );
   }

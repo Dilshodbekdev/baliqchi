@@ -26,10 +26,10 @@ class AppColors {
   static const Color bottomNavNoActiveIconColor = Color(0xFFA2A0B3);
 
   static const Color createdColor = Color(0xFF451EDD);
-  static const Color sentColor = Color(0xFFFF9C27);
-  static const Color sentToAcceptColor = Color(0xFFDD411E);
+  static const Color mainYellowColor = Color(0xFFF6BE00);
+  static const Color mainRedColor = Color(0xFFFF1111);
   static const Color progressColor = Color(0xFF2A97FC);
-  static const Color completesColor = Color(0xFF48EB1F);
+  static const Color mainGreenColor = Color(0xFF64AC51);
 
   static const Color amountFishColor = Color(0xFFED7D31);
   static const Color foodPriceColor = Color(0xFF171142);

@@ -17,9 +17,12 @@ class AppRow extends StatelessWidget {
           style: CustomTextStyle.hint,
         ),
         const SizedBox(width: 16),
-        Text(
-          text2,
-          style: CustomTextStyle.h16SB,
+        Flexible(
+          child: Text(
+            text2,
+            style: CustomTextStyle.h16SB,
+            overflow: TextOverflow.ellipsis,
+          ),
         )
       ],
     );

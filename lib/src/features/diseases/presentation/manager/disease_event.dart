@@ -8,3 +8,9 @@ class DiseasesEvent extends DiseaseEvent {
 
   DiseasesEvent({required this.isPaging, required this.search});
 }
+
+class GetDiseaseEvent extends DiseaseEvent {
+  final String id;
+
+  GetDiseaseEvent({required this.id});
+}
